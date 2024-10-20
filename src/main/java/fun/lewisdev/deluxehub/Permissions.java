@@ -17,6 +17,7 @@ public enum Permissions {
     COMMAND_LOCKCHAT("command.lockchat"),
     COMMAND_SET_LOBBY("command.setlobby"),
     COMMAND_VANISH("command.vanish"),
+	COMMAND_BUILD_MODE("command.buildmode"),
 
     // Module stuff
     ANTI_SWEAR_BYPASS("bypass.antiswear"),
@@ -34,10 +35,7 @@ public enum Permissions {
     EVENT_PLAYER_PVP("player.pvp"),
     EVENT_BLOCK_INTERACT("block.interact"),
     EVENT_BLOCK_BREAK("block.break"),
-    EVENT_BLOCK_PLACE("block.place"),
-
-	// Base stuff
-	BASE_BUILDMODE_ALWAYS("buildmode.always");
+    EVENT_BLOCK_PLACE("block.place");
 
     private final String perm;
 
