@@ -4,7 +4,6 @@ import fun.lewisdev.deluxehub.utility.TextUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public enum Messages {
@@ -66,7 +65,9 @@ public enum Messages {
 
     WORLD_DOWNLOAD_NOTIFY("ANTI_WORLD_DOWNLOADER.ADMIN_NOTIFY"),
 
-	BUILD_MODE_ENABLED("BUILD_MODE.ENABLED_ACTION_BAR");
+	BUILD_MODE_ENABLED_ACTIONBAR("BUILD_MODE.ENABLED_ACTION_BAR"),
+	BUILD_MODE_ENABLED("BUILD_MODE.ENABLED"),
+	BUILD_MODE_DISABLED("BUILD_MODE.DISABLED");
 
     private static FileConfiguration config;
     private final String path;

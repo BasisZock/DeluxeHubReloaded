@@ -79,3 +79,5 @@ Messages:
 
   BUILD_MODE:
     ENABLED_ACTION_BAR: "&5DeluxeHub &7 | &fBuild mode &a&lenabled&7."
+    ENABLED: "%prefix% &7Build mode has been &a&lenabled&7."
+    DISABLED: "%prefix% &7Build mode has been &c&ldisabled&7."
