@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fun.lewisdev.deluxehub.Permissions;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,8 +70,12 @@ public class UpdateChecker {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    player.sendMessage(TextUtil.color("&7An update (%VERSION%) for DeluxeHubReloaded is available at:".replace("%VERSION%", version)));
-                                    player.sendMessage(TextUtil.color(URL));
+                                    player.sendMessage(TextUtil.color("&7An update (" + version + ") for DeluxeHubReloaded is available."));
+
+                                    TextComponent downloadMessage = new TextComponent(TextUtil.color("&a[Download]"));
+                                    downloadMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
+
+                                    player.spigot().sendMessage(downloadMessage);
                                 }
                             }.runTaskLater(plugin, 60L); // 60 ticks = 3 seconds
                         }
