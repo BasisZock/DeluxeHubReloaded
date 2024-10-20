@@ -78,6 +78,6 @@ Messages:
     ADMIN_NOTIFY: "%prefix% &f%player% &chas joined with the World Downloader Mod, their ability to use it has been restricted by our systems."
 
   BUILD_MODE:
-    ENABLED_ACTION_BAR: "&5DeluxeHub &7 | &fBuild mode &a&lenabled&7."
+    ENABLED_ACTION_BAR: "&5DeluxeHubReloaded &7 | &fBuild mode &a&lenabled&7."
     ENABLED: "%prefix% &7Build mode has been &a&lenabled&7."
     DISABLED: "%prefix% &7Build mode has been &c&ldisabled&7."
