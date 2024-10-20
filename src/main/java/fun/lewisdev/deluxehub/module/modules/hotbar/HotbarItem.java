@@ -2,6 +2,7 @@ package fun.lewisdev.deluxehub.module.modules.hotbar;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
+import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
@@ -103,6 +104,7 @@ public abstract class HotbarItem implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!allowMovement) return;
+		if (BuildMode.getInstance().isPresent(event.getWhoClicked().getUniqueId())) return;
 
         Player player = (Player) event.getWhoClicked();
         if (getHotbarManager().inDisabledWorld(player.getLocation())) return;
@@ -156,6 +158,7 @@ public abstract class HotbarItem implements Listener {
     @EventHandler
     public void hotbarPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
         if (!getHotbarManager().inDisabledWorld(player.getLocation())) giveItem(player);
     }
 

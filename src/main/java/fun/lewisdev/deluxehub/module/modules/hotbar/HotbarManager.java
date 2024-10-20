@@ -1,6 +1,7 @@
 package fun.lewisdev.deluxehub.module.modules.hotbar;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
+import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
@@ -9,6 +10,7 @@ import fun.lewisdev.deluxehub.module.modules.hotbar.items.PlayerHider;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -70,12 +72,23 @@ public class HotbarManager extends Module {
         hotbarItems.add(hotbarItem);
     }
 
+	public void giveItems(Player player){
+		hotbarItems.stream()
+				.filter(p -> !inDisabledWorld(player.getLocation()) && !BuildMode.getInstance().isPresent(player.getUniqueId()))
+				.forEach(hotbarItem -> hotbarItem.giveItem(player));
+	}
+
     private void giveItems() {
-        Bukkit.getOnlinePlayers().stream().filter(player -> !inDisabledWorld(player.getLocation())).forEach(player -> hotbarItems.forEach(hotbarItem -> hotbarItem.giveItem(player)));
+        Bukkit.getOnlinePlayers().stream()
+				.filter(player -> !inDisabledWorld(player.getLocation())
+						&& !BuildMode.getInstance().isPresent(player.getUniqueId()))
+				.forEach(player -> hotbarItems.forEach(hotbarItem -> hotbarItem.giveItem(player)));
     }
 
     private void removeItems() {
-        Bukkit.getOnlinePlayers().stream().filter(player -> !inDisabledWorld(player.getLocation())).forEach(player -> hotbarItems.forEach(hotbarItem -> hotbarItem.removeItem(player)));
+        Bukkit.getOnlinePlayers().stream()
+				.filter(player -> !inDisabledWorld(player.getLocation()))
+				.forEach(player -> hotbarItems.forEach(hotbarItem -> hotbarItem.removeItem(player)));
     }
 
 }

@@ -1,5 +1,6 @@
 package fun.lewisdev.deluxehub.inventory;
 
+import fun.lewisdev.deluxehub.base.BuildMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,7 +12,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-
+		if (BuildMode.getInstance().isPresent(event.getWhoClicked().getUniqueId())) return;
         if (event.getView().getTopInventory().getHolder() instanceof InventoryBuilder) {
 
             event.setCancelled(true);

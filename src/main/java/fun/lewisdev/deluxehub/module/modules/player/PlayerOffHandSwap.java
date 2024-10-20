@@ -1,6 +1,7 @@
 package fun.lewisdev.deluxehub.module.modules.player;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
+import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import org.bukkit.event.EventHandler;
@@ -23,11 +24,13 @@ public class PlayerOffHandSwap extends Module {
 
     @EventHandler
     public void onPlayerSwapItem(PlayerSwapHandItemsEvent event) {
+		if(BuildMode.getInstance().isPresent(event.getPlayer().getUniqueId())) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+		if (BuildMode.getInstance().isPresent(event.getWhoClicked().getUniqueId())) return;
         if (event.getRawSlot() != event.getSlot() && event.getCursor() != null && event.getSlot() == 40) {
             event.setCancelled(true);
         }
