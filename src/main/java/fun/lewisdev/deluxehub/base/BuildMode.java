@@ -23,12 +23,12 @@ import java.util.UUID;
 
 public class BuildMode implements Listener {
 	private static BuildMode _instance;
-	private DeluxeHubPlugin _plugin;
+	private final DeluxeHubPlugin _plugin;
 	private final ArrayList<UUID> _players = new ArrayList<>();
 	private boolean _actionbar_enabled = true;
 
 	private boolean _invertedWorlds = false;
-	private List<String> _worlds;
+	private final List<String> _worlds;
 
 
 	public BuildMode(){
@@ -65,11 +65,6 @@ public class BuildMode implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void PlayerJoin(PlayerJoinEvent event){
-		final Player player = event.getPlayer();
-	}
-
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void PlayerQuit(PlayerQuitEvent event){
 		final UUID uuid = event.getPlayer().getUniqueId();
 		if(isPresent(uuid)) removePlayer(uuid);
@@ -91,14 +86,6 @@ public class BuildMode implements Listener {
 			player.setGameMode(GameMode.SURVIVAL);
 			((HotbarManager) _plugin.getModuleManager().getModule(ModuleType.HOTBAR_ITEMS)).giveItems(player);
 		}
-	}
-
-	public void clearPlayers(){
-		_players.clear();
-	}
-
-	public void addPlayers(ArrayList<UUID> uuids){
-		_players.addAll(uuids);
 	}
 
 	public boolean isPresent(UUID uuid){

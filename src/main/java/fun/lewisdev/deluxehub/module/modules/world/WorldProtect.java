@@ -15,8 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.ChiseledBookshelf;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -24,7 +22,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +49,7 @@ public class WorldProtect extends Module {
     private boolean playerDrowning;
     private boolean fireDamage;
 
-    private List<Material> interactables = Arrays.asList(
+    private final List<Material> interactables = Arrays.asList(
             XMaterial.ACACIA_DOOR.parseMaterial(),
             XMaterial.ACACIA_FENCE_GATE.parseMaterial(),
             XMaterial.ANVIL.parseMaterial(),
@@ -214,12 +211,14 @@ public class WorldProtect extends Module {
         Entity player = event.getRemover();
 
         if (entity instanceof Painting || entity instanceof ItemFrame && player instanceof Player) {
-            if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
-			if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
-            event.setCancelled(true);
-            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
-                Messages.EVENT_BLOCK_BREAK.send(player);
-            }
+			if(player != null){
+				if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
+				if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+				event.setCancelled(true);
+				if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
+					Messages.EVENT_BLOCK_BREAK.send(player);
+				}
+			}
         }
     }
 

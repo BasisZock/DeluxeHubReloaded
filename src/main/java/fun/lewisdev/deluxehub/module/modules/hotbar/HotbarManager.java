@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HotbarManager extends Module {
 
@@ -31,7 +32,7 @@ public class HotbarManager extends Module {
 
         if (config.getBoolean("custom_join_items.enabled")) {
 
-            for (String entry : config.getConfigurationSection("custom_join_items.items").getKeys(false)) {
+            for (String entry : Objects.requireNonNull(config.getConfigurationSection("custom_join_items.items")).getKeys(false)) {
                 ItemStack item = ItemStackBuilder.getItemStack(config.getConfigurationSection("custom_join_items.items." + entry)).build();
                 CustomItem customItem = new CustomItem(this, item, config.getInt("custom_join_items.items." + entry + ".slot"), entry);
 

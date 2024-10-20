@@ -19,14 +19,16 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Objects;
+
 public abstract class HotbarItem implements Listener {
 
-    private HotbarManager hotbarManager;
-    private ItemStack item;
+    private final HotbarManager hotbarManager;
+    private final ItemStack item;
     private ConfigurationSection configurationSection;
-    private String key;
+    private final String key;
     private String permission = null;
-    private int slot;
+    private final int slot;
     private boolean allowMovement;
 
     public HotbarItem(HotbarManager hotbarManager, ItemStack item, int slot, String key) {
@@ -97,7 +99,7 @@ public abstract class HotbarItem implements Listener {
         ItemStack item = inventory.getItem(slot);
 
         if (item != null && new NBTItem(item).getString("hotbarItem").equals(key)) {
-            inventory.remove(inventory.getItem(slot));
+            inventory.remove(Objects.requireNonNull(inventory.getItem(slot)));
         }
     }
 
