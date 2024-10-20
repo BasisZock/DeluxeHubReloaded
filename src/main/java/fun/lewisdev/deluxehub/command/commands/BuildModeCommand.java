@@ -15,7 +15,7 @@ public class BuildModeCommand {
 	public BuildModeCommand(DeluxeHubPlugin plugin){}
 
 	@Command(
-			aliases = {"build"},
+			aliases = {"buildmode"},
 			desc = "Toggle build mode."
 	)
 	public void buildMode(final CommandContext args, final CommandSender sender) throws CommandException {
