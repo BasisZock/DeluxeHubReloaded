@@ -76,3 +76,6 @@ Messages:
 
   ANTI_WORLD_DOWNLOADER:
     ADMIN_NOTIFY: "%prefix% &f%player% &chas joined with the World Downloader Mod, their ability to use it has been restricted by our systems."
+
+  BUILD_MODE:
+    ENABLED_ACTION_BAR: "&5DeluxeHub &7 | &fBuild mode &a&lenabled&7."
