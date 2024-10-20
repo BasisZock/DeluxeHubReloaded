@@ -47,7 +47,7 @@
 # | GENERAL SETTINGS                         |
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-# Check for latest SpigotMC updates (recommended).
+# Check for latest GitHub updates (recommended).
 check-updates: true
 
 # Disable specific worlds
