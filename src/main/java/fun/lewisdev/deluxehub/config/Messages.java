@@ -84,7 +84,7 @@ public enum Messages {
 		Object value = config.get("Messages." + this.path);
 		String message;
 		if (value == null) {
-			message = "DeluxeHub: message not found (" + this.path + ")";
+			message = "DeluxeHubReloaded: message not found (" + this.path + ") - Check your messages.yml!";
 		}else {
 			message = value instanceof List ? TextUtil.fromList((List<?>) value) : value.toString();
 		}
