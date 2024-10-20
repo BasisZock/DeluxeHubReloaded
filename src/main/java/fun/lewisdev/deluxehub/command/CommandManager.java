@@ -108,6 +108,9 @@ public class CommandManager {
             case "VANISH":
                 commandRegistry.register(VanishCommand.class, aliases);
                 break;
+			case "BUILDMODE":
+				commandRegistry.register(BuildModeCommand.class, aliases);
+				break;
         }
     }
 

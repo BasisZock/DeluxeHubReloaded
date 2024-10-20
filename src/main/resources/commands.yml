@@ -56,3 +56,7 @@ commands:
     enabled: true
     aliases:
       - v
+  buildmode:
+    enabled: true
+    aliases:
+      - build
