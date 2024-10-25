@@ -58,8 +58,14 @@ public class UpdateChecker {
 
 					if (localPluginVersion.equals(version)) return;
 
-                    plugin.getLogger().warning("An update for DeluxeHubReloaded (%VERSION%) is available at:".replace("%VERSION%", version));
-                    plugin.getLogger().warning(URL);
+					if(localPluginVersion.contains("-dev")){
+						plugin.getLogger().warning("This is DEV version of DeluxeHubReloaded plugin.");
+						plugin.getLogger().warning("You can download stable version at:");
+						plugin.getLogger().warning(URL);
+					}else{
+						plugin.getLogger().warning("An update for DeluxeHubReloaded (%VERSION%) is available at:".replace("%VERSION%", version));
+						plugin.getLogger().warning(URL);
+					}
 
                     Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().registerEvents(new Listener() {
                         @EventHandler(priority = EventPriority.MONITOR)
@@ -70,12 +76,17 @@ public class UpdateChecker {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    player.sendMessage(TextUtil.color("&7An update (" + version + ") for DeluxeHubReloaded is available."));
-
-                                    TextComponent downloadMessage = new TextComponent(TextUtil.color("&a[Download]"));
-                                    downloadMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
-
-                                    player.spigot().sendMessage(downloadMessage);
+									if(localPluginVersion.contains("-dev")){
+										player.sendMessage(TextUtil.color("&7This is DEV version of DeluxeHubReloaded plugin."));
+										TextComponent downloadMsg = new TextComponent("&a> You can download stable version here! <");
+										downloadMsg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
+										player.spigot().sendMessage(downloadMsg);
+									}else {
+										player.sendMessage(TextUtil.color("&7An update (" + version + ") for DeluxeHubReloaded is available."));
+										TextComponent downloadMessage = new TextComponent(TextUtil.color("&a[Download]"));
+										downloadMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
+										player.spigot().sendMessage(downloadMessage);
+									}
                                 }
                             }.runTaskLater(plugin, 60L); // 60 ticks = 3 seconds
                         }
