@@ -8,6 +8,7 @@
 # AUTHOR: Strafbefehl & Lewis D (ItsLewizzz)
 # WIKI: https://wiki.lewisdev.fun/free-resources/deluxehub
 # Copyright (c) Lewis D 2017-2022. All rights reserved.
+# Support: https://discord.gg/uQkg8ZeHzK
 #--------
 # CUSTOM MENUS
 #   You can add more menus to the "DeluxeHub/menus" directory,
@@ -40,7 +41,7 @@
 # [CLOSE] - Close an open inventory gui
 #--------
 # MESSAGE FORMATTING:
-# HEX colors formatting: https://wiki.lewisdev.fun/text-colours-rgb
+# HEX colors formatting: {#FFFFFF} and for Gradients {#12C2E9} Your Message {/#C471ED}
 # <center> Centered message! </center> - Centers a message in chat
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
