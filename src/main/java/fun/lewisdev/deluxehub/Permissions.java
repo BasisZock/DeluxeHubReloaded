@@ -35,7 +35,9 @@ public enum Permissions {
     EVENT_PLAYER_PVP("player.pvp"),
     EVENT_BLOCK_INTERACT("block.interact"),
     EVENT_BLOCK_BREAK("block.break"),
-    EVENT_BLOCK_PLACE("block.place");
+    EVENT_BLOCK_PLACE("block.place"),
+
+	BUILDMODE_DEFAULT("buildmode.default");
 
     private final String perm;
 
