@@ -1,6 +1,7 @@
 package fun.lewisdev.deluxehub.base;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
+import fun.lewisdev.deluxehub.Permissions;
 import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.config.Messages;
 import fun.lewisdev.deluxehub.module.ModuleType;
@@ -62,6 +63,14 @@ public class BuildMode implements Listener {
 				}
 			}
 		}.runTaskTimer(_plugin, 5L, 5L);
+	}
+
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void PlayerJoin(PlayerJoinEvent event){
+		Player p = event.getPlayer();
+		if(p.hasPermission(Permissions.BUILDMODE_DEFAULT.getPermission())){
+			addPlayer(p);
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
