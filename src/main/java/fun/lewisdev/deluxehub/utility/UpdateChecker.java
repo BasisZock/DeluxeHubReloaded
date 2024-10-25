@@ -78,7 +78,7 @@ public class UpdateChecker {
                                 public void run() {
 									if(localPluginVersion.contains("-dev")){
 										player.sendMessage(TextUtil.color("&7This is DEV version of DeluxeHubReloaded plugin."));
-										TextComponent downloadMsg = new TextComponent("&a> You can download stable version here! <");
+										TextComponent downloadMsg = new TextComponent(TextUtil.color("&a> You can download stable version here! <"));
 										downloadMsg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
 										player.spigot().sendMessage(downloadMsg);
 									}else {
