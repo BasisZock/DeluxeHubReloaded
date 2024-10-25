@@ -30,6 +30,7 @@ public class BuildModeCommand {
 
 		if(bm.isPresent(player.getUniqueId())){
 			bm.removePlayer(player.getUniqueId());
+			player.setAllowFlight(true);
 			Messages.BUILD_MODE_DISABLED.send(player);
 			return;
 		}
