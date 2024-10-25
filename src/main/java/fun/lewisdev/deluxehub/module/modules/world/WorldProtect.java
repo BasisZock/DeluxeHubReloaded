@@ -3,6 +3,7 @@ package fun.lewisdev.deluxehub.module.modules.world;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.Permissions;
+import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.config.Messages;
 import fun.lewisdev.deluxehub.cooldown.CooldownType;
@@ -14,8 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.ChiseledBookshelf;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -23,7 +22,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -51,7 +49,7 @@ public class WorldProtect extends Module {
     private boolean playerDrowning;
     private boolean fireDamage;
 
-    private List<Material> interactables = Arrays.asList(
+    private final List<Material> interactables = Arrays.asList(
             XMaterial.ACACIA_DOOR.parseMaterial(),
             XMaterial.ACACIA_FENCE_GATE.parseMaterial(),
             XMaterial.ANVIL.parseMaterial(),
@@ -165,6 +163,7 @@ public class WorldProtect extends Module {
         Player player = event.getPlayer();
         if (inDisabledWorld(player.getLocation())) return;
         if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
         event.setCancelled(true);
 
@@ -181,6 +180,7 @@ public class WorldProtect extends Module {
         if (inDisabledWorld(player.getLocation())) return;
         ItemStack item = event.getItemInHand();
         if(item.getType() == Material.AIR) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
         if (new NBTItem(event.getItemInHand()).hasKey("hotbarItem")) {
             event.setCancelled(true);
@@ -211,11 +211,14 @@ public class WorldProtect extends Module {
         Entity player = event.getRemover();
 
         if (entity instanceof Painting || entity instanceof ItemFrame && player instanceof Player) {
-            if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
-            event.setCancelled(true);
-            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
-                Messages.EVENT_BLOCK_BREAK.send(player);
-            }
+			if(player != null){
+				if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
+				if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+				event.setCancelled(true);
+				if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
+					Messages.EVENT_BLOCK_BREAK.send(player);
+				}
+			}
         }
     }
 
@@ -227,6 +230,7 @@ public class WorldProtect extends Module {
         Entity player = event.getPlayer();
 
         if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
         if (entity instanceof ItemFrame) {
             event.setCancelled(true);
@@ -246,6 +250,7 @@ public class WorldProtect extends Module {
         if (entity instanceof ItemFrame && damager instanceof Player) {
             Player player = (Player) damager;
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+			if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
             event.setCancelled(true);
             if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
                 Messages.EVENT_BLOCK_INTERACT.send(player);
@@ -259,6 +264,7 @@ public class WorldProtect extends Module {
 
         Player player = event.getPlayer();
         if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
         Block block = event.getClickedBlock();
         if (block == null) return;
 
@@ -284,6 +290,7 @@ public class WorldProtect extends Module {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         if (inDisabledWorld(player.getLocation())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
         EntityDamageEvent.DamageCause cause = event.getCause();
         if (fallDamage && cause == EntityDamageEvent.DamageCause.FALL) event.setCancelled(true);
@@ -326,6 +333,7 @@ public class WorldProtect extends Module {
 
         if (inDisabledWorld(player.getLocation())) return;
         if (player.hasPermission(Permissions.EVENT_ITEM_DROP.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
         event.setCancelled(true);
 
@@ -334,19 +342,20 @@ public class WorldProtect extends Module {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerPickupEvent(PlayerPickupItemEvent event) {
-        if (!itemPickup) return;
-
-        Player player = event.getPlayer();
-        if (inDisabledWorld(player.getLocation())) return;
-        if (player.hasPermission(Permissions.EVENT_ITEM_PICKUP.getPermission())) return;
-
-        event.setCancelled(true);
-        if (tryCooldown(player.getUniqueId(), CooldownType.ITEM_PICKUP, 3)) {
-            Messages.EVENT_ITEM_PICKUP.send(player);
-        }
-    }
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerPickupEvent(EntityPickupItemEvent event){
+		if(!itemDrop) return;
+		if(event.getEntity() instanceof  Player){
+			Player player = (Player) event.getEntity();
+			if (inDisabledWorld(player.getLocation())) return;
+			if (player.hasPermission(Permissions.EVENT_ITEM_PICKUP.getPermission())) return;
+			if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+			event.setCancelled(true);
+			if(tryCooldown(player.getUniqueId(), CooldownType.ITEM_PICKUP, 3)) {
+				Messages.EVENT_ITEM_PICKUP.send(player);
+			}
+		}
+	}
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onLeafDecay(LeavesDecayEvent event) {
@@ -372,6 +381,9 @@ public class WorldProtect extends Module {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (!deathMessage || inDisabledWorld(event.getEntity().getLocation())) return;
+		if (BuildMode.getInstance().isPresent(event.getEntity().getUniqueId())) event.setKeepInventory(true);
+		event.getDrops().clear();
+		event.setKeepLevel(true);
         event.setDeathMessage(null);
     }
 
@@ -400,6 +412,7 @@ public class WorldProtect extends Module {
         Entity player = event.getPlayer();
 
         if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
         event.setCancelled(true);
     }
@@ -407,6 +420,7 @@ public class WorldProtect extends Module {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getPlayer().hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(event.getPlayer().getUniqueId())) return;
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block clickedBlock = event.getClickedBlock();
             if (clickedBlock != null && clickedBlock.getType() == Material.CHISELED_BOOKSHELF) {

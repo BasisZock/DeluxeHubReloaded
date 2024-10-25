@@ -2,6 +2,7 @@ package fun.lewisdev.deluxehub.module.modules.hotbar;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
+import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
@@ -18,14 +19,16 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.Objects;
+
 public abstract class HotbarItem implements Listener {
 
-    private HotbarManager hotbarManager;
-    private ItemStack item;
+    private final HotbarManager hotbarManager;
+    private final ItemStack item;
     private ConfigurationSection configurationSection;
-    private String key;
+    private final String key;
     private String permission = null;
-    private int slot;
+    private final int slot;
     private boolean allowMovement;
 
     public HotbarItem(HotbarManager hotbarManager, ItemStack item, int slot, String key) {
@@ -96,13 +99,14 @@ public abstract class HotbarItem implements Listener {
         ItemStack item = inventory.getItem(slot);
 
         if (item != null && new NBTItem(item).getString("hotbarItem").equals(key)) {
-            inventory.remove(inventory.getItem(slot));
+            inventory.remove(Objects.requireNonNull(inventory.getItem(slot)));
         }
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!allowMovement) return;
+		if (BuildMode.getInstance().isPresent(event.getWhoClicked().getUniqueId())) return;
 
         Player player = (Player) event.getWhoClicked();
         if (getHotbarManager().inDisabledWorld(player.getLocation())) return;
@@ -156,6 +160,7 @@ public abstract class HotbarItem implements Listener {
     @EventHandler
     public void hotbarPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
         if (!getHotbarManager().inDisabledWorld(player.getLocation())) giveItem(player);
     }
 

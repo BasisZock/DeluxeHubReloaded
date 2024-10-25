@@ -63,7 +63,11 @@ public enum Messages {
     HOLOGRAMS_ADDED_LINE("HOLOGRAMS.ADDED_LINE"),
     HOLOGRAMS_REMOVED_LINE("HOLOGRAMS.REMOVED_LINE"),
 
-    WORLD_DOWNLOAD_NOTIFY("ANTI_WORLD_DOWNLOADER.ADMIN_NOTIFY");
+    WORLD_DOWNLOAD_NOTIFY("ANTI_WORLD_DOWNLOADER.ADMIN_NOTIFY"),
+
+	BUILD_MODE_ENABLED_ACTIONBAR("BUILD_MODE.ENABLED_ACTION_BAR"),
+	BUILD_MODE_ENABLED("BUILD_MODE.ENABLED"),
+	BUILD_MODE_DISABLED("BUILD_MODE.DISABLED");
 
     private static FileConfiguration config;
     private final String path;
@@ -76,16 +80,19 @@ public enum Messages {
         config = c;
     }
 
+	public String toString(){
+		Object value = config.get("Messages." + this.path);
+		String message;
+		if (value == null) {
+			message = "DeluxeHubReloaded: message not found (" + this.path + ") - Check your messages.yml!";
+		}else {
+			message = value instanceof List ? TextUtil.fromList((List<?>) value) : value.toString();
+		}
+		return message;
+	}
+
     public void send(CommandSender receiver, Object... replacements) {
-        Object value = config.get("Messages." + this.path);
-
-        String message;
-        if (value == null) {
-            message = "DeluxeHub: message not found (" + this.path + ")";
-        }else {
-            message = value instanceof List ? TextUtil.fromList((List<?>) value) : value.toString();
-        }
-
+        String message = toString();
         if (!message.isEmpty()) {
             receiver.sendMessage(TextUtil.color(replace(message, replacements)));
         }

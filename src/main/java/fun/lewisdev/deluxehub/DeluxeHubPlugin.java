@@ -7,6 +7,7 @@ import cl.bgmp.minecraft.util.commands.exceptions.MissingNestedCommandException;
 import cl.bgmp.minecraft.util.commands.exceptions.WrappedCommandException;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import fun.lewisdev.deluxehub.action.ActionManager;
+import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.command.CommandManager;
 import fun.lewisdev.deluxehub.config.ConfigManager;
 import fun.lewisdev.deluxehub.config.ConfigType;
@@ -17,7 +18,6 @@ import fun.lewisdev.deluxehub.inventory.InventoryManager;
 import fun.lewisdev.deluxehub.module.ModuleManager;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.hologram.HologramManager;
-import fun.lewisdev.deluxehub.utility.TextUtil;
 import fun.lewisdev.deluxehub.utility.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -25,6 +25,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
@@ -101,6 +102,9 @@ public class DeluxeHubPlugin extends JavaPlugin {
         // Action system
         actionManager = new ActionManager(this);
 
+		//BuildMode manager
+		BuildMode.getInstance();
+
         // Load update checker (if enabled)
         if (getConfigManager().getFile(ConfigType.SETTINGS).getConfig().getBoolean("check-updates"))
             new UpdateChecker(this).checkForUpdate();
@@ -117,7 +121,6 @@ public class DeluxeHubPlugin extends JavaPlugin {
         moduleManager.unloadModules();
         inventoryManager.onDisable();
         configManager.saveFiles();
-
     }
 
     public void reload() {
@@ -126,7 +129,9 @@ public class DeluxeHubPlugin extends JavaPlugin {
 
         configManager.reloadFiles();
 
-        inventoryManager.onDisable();
+		BuildMode.getInstance().runScheduler();
+
+		inventoryManager.onDisable();
         inventoryManager.onEnable(this);
 
         getCommandManager().reload();
@@ -135,7 +140,7 @@ public class DeluxeHubPlugin extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.Command cmd, @NotNull String commandLabel, String[] args) {
         try {
             getCommandManager().execute(cmd.getName(), args, sender);
         } catch (CommandPermissionsException e) {
@@ -143,7 +148,6 @@ public class DeluxeHubPlugin extends JavaPlugin {
         } catch (MissingNestedCommandException e) {
             sender.sendMessage(ChatColor.RED + e.getUsage());
         } catch (CommandUsageException e) {
-            //sender.sendMessage(ChatColor.RED + e.getMessage());
             sender.sendMessage(ChatColor.RED + "Usage: " + e.getUsage());
         } catch (WrappedCommandException e) {
             if (e.getCause() instanceof NumberFormatException) {
