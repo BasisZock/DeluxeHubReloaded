@@ -11,6 +11,9 @@ import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -29,6 +32,20 @@ public class HotbarManager extends Module {
     public void onEnable() {
         hotbarItems = new ArrayList<>();
         FileConfiguration config = getConfig(ConfigType.SETTINGS);
+
+        if (config.getBoolean("hotbar.joinslot")) {
+            int joinSlot = config.getInt("hotbar.slot_number");
+
+            Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+                @EventHandler
+                public void onPlayerJoin(PlayerJoinEvent event) {
+                    Player player = event.getPlayer();
+                    // Setze den Hotbar-Slot des Spielers
+                    player.getInventory().setHeldItemSlot(joinSlot);
+                }
+            }, getPlugin());
+        }
+
 
         if (config.getBoolean("custom_join_items.enabled")) {
 

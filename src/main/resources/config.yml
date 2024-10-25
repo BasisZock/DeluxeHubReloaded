@@ -331,6 +331,10 @@ join_settings:
       - TEAL
       - WHITE
 
+hotbar:
+  joinslot: true
+  slot_number: 4 # Slot which is selected at join 0-8
+
 custom_join_items:
   # Should custom join items be enabled?
   enabled: true
