@@ -1,7 +1,6 @@
 package fun.lewisdev.deluxehub.base;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
-import fun.lewisdev.deluxehub.Permissions;
 import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.config.Messages;
 import fun.lewisdev.deluxehub.module.ModuleType;
@@ -14,12 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BuildMode implements Listener {
@@ -57,7 +56,7 @@ public class BuildMode implements Listener {
 				if (_plugin.getServer().getOnlinePlayers().isEmpty()) return;
 				for (Player p : _plugin.getServer().getOnlinePlayers()) {
 					if (_players.contains(p.getUniqueId())) {
-						if (!isInPermittedWorld(p.getLocation().getWorld().getName())) {
+						if (!isInPermittedWorld(Objects.requireNonNull(p.getLocation().getWorld()).getName())) {
 							p.getInventory().clear();
 							removePlayer(p.getUniqueId());
 							continue;
@@ -69,14 +68,6 @@ public class BuildMode implements Listener {
 				}
 			}
 		}.runTaskTimer(_plugin, 5L, 5L);
-	}
-
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void PlayerJoin(PlayerJoinEvent event) {
-		Player p = event.getPlayer();
-		if (p.hasPermission(Permissions.BUILDMODE_DEFAULT.getPermission())) {
-			addPlayer(p);
-		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
