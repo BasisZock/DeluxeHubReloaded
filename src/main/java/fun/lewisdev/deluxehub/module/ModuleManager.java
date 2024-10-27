@@ -11,10 +11,7 @@ import fun.lewisdev.deluxehub.module.modules.player.PlayerOffHandSwap;
 import fun.lewisdev.deluxehub.module.modules.player.PlayerVanish;
 import fun.lewisdev.deluxehub.module.modules.visual.scoreboard.ScoreboardManager;
 import fun.lewisdev.deluxehub.module.modules.visual.tablist.TablistManager;
-import fun.lewisdev.deluxehub.module.modules.world.AntiWorldDownloader;
-import fun.lewisdev.deluxehub.module.modules.world.Launchpad;
-import fun.lewisdev.deluxehub.module.modules.world.LobbySpawn;
-import fun.lewisdev.deluxehub.module.modules.world.WorldProtect;
+import fun.lewisdev.deluxehub.module.modules.world.*;
 import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -45,6 +42,7 @@ public class ModuleManager {
                 for (String world : config.getStringList("disabled-worlds.worlds")) disabledWorlds.remove(world);
         }
 
+		registerModule(new StaticTime(plugin), "static_time.enabled");
         registerModule(new AntiWorldDownloader(plugin), "anti_wdl.enabled");
         registerModule(new DoubleJump(plugin), "double_jump.enabled");
         registerModule(new Launchpad(plugin), "launchpad.enabled");

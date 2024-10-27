@@ -1,7 +1,7 @@
 package fun.lewisdev.deluxehub.module;
 
 public enum ModuleType {
-
+	STATIC_TIME,
     ANTI_WDL,
     CHAT_LOCK,
     CUSTOM_COMMANDS,
