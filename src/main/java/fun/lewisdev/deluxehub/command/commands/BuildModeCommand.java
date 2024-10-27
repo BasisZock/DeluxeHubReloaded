@@ -7,6 +7,7 @@ import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.Permissions;
 import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.config.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,22 +21,43 @@ public class BuildModeCommand {
 			desc = "Toggle build mode."
 	)
 	public void buildMode(final CommandContext args, final CommandSender sender) throws CommandException {
-		if (!(sender instanceof Player)) throw new CommandException("Console cannot use build mode");
-		if (!(sender.hasPermission(Permissions.COMMAND_BUILD_MODE.getPermission()))) {
-			Messages.NO_PERMISSION.send(sender);
-			return;
+		final BuildMode bm = BuildMode.getInstance();
+		Player target;
+		if(args.argsLength() >= 1){
+			if (!(sender.hasPermission(Permissions.COMMAND_BUILD_MODE_OTHERS.getPermission()))) {
+				Messages.NO_PERMISSION.send(sender);
+				return;
+			}
+			target = Bukkit.getPlayer(args.getString(0));
+			if(target == null){
+				Messages.BUILD_MODE_COMMAND_TARGET_NOT_FOUND.send(sender, "%target%", args.getString(0));
+				return;
+			}
+		}else{
+			if (!(sender instanceof Player)) throw new CommandException("Console cannot use build mode");
+			target = (Player) sender;
+			if (!(sender.hasPermission(Permissions.COMMAND_BUILD_MODE.getPermission())) || !(sender.hasPermission(Permissions.COMMAND_BUILD_MODE_OTHERS.getPermission()))) {
+				if(BuildMode.getInstance().isPresent(((Player) sender).getUniqueId())){
+					remove(bm, target);
+					return;
+				}
+				Messages.NO_PERMISSION.send(sender);
+				return;
+			}
 		}
 
-		Player player = (Player) sender;
-		BuildMode bm = BuildMode.getInstance();
-
-		if (bm.isPresent(player.getUniqueId())) {
-			bm.removePlayer(player.getUniqueId());
-			player.setAllowFlight(true);
-			Messages.BUILD_MODE_DISABLED.send(player);
+		if (bm.isPresent(target.getUniqueId())) {
+			remove(bm, target);
 			return;
 		}
-		bm.addPlayer(player);
-		Messages.BUILD_MODE_ENABLED.send(player);
+		bm.addPlayer(target);
+		Messages.BUILD_MODE_ENABLED.send(target);
+		if(args.argsLength() >= 1) Messages.BUILD_MODE_COMMAND_ENABLED_FOR_TARGET.send(sender, "%target%", target.getDisplayName());
+	}
+
+	private void remove(BuildMode instance, Player target){
+		instance.removePlayer(target.getUniqueId());
+		target.setAllowFlight(true);
+		Messages.BUILD_MODE_DISABLED.send(target);
 	}
 }
