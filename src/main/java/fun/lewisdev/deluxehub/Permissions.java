@@ -18,6 +18,7 @@ public enum Permissions {
 	COMMAND_SET_LOBBY("command.setlobby"),
 	COMMAND_VANISH("command.vanish"),
 	COMMAND_BUILD_MODE("command.buildmode"),
+	COMMAND_BUILD_MODE_OTHERS("command.buildmode.others"),
 
 	// Module stuff
 	ANTI_SWEAR_BYPASS("bypass.antiswear"),
