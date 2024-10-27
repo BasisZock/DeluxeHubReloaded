@@ -1,27 +1,20 @@
 package fun.lewisdev.deluxehub.module.modules.player;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
-import fun.lewisdev.deluxehub.Permissions;
 import fun.lewisdev.deluxehub.command.commands.FlyCommand;
 import fun.lewisdev.deluxehub.config.ConfigType;
-import fun.lewisdev.deluxehub.config.Messages;
-import fun.lewisdev.deluxehub.cooldown.CooldownType;
 import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
-import java.util.UUID;
 
 public class DoubleJump extends Module {
 

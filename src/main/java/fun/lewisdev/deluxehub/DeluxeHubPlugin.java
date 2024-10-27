@@ -1,10 +1,6 @@
 package fun.lewisdev.deluxehub;
 
-import cl.bgmp.minecraft.util.commands.exceptions.CommandException;
-import cl.bgmp.minecraft.util.commands.exceptions.CommandPermissionsException;
-import cl.bgmp.minecraft.util.commands.exceptions.CommandUsageException;
-import cl.bgmp.minecraft.util.commands.exceptions.MissingNestedCommandException;
-import cl.bgmp.minecraft.util.commands.exceptions.WrappedCommandException;
+import cl.bgmp.minecraft.util.commands.exceptions.*;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import fun.lewisdev.deluxehub.action.ActionManager;
 import fun.lewisdev.deluxehub.base.BuildMode;
