@@ -88,6 +88,10 @@ public class ItemStackBuilder {
 			builder.withFlags(flags.toArray(new ItemFlag[0]));
 		}
 
+		if(section.contains("custom_model_data")) {
+			builder.setCustomModelData(section.getInt("custom_model_data"));
+		}
+
 		return builder;
 	}
 
@@ -117,6 +121,13 @@ public class ItemStackBuilder {
 	public ItemStackBuilder withName(String name, Player player) {
 		final ItemMeta meta = ITEM_STACK.getItemMeta();
 		meta.setDisplayName(TextUtil.color(PlaceholderUtil.setPlaceholders(name, player)));
+		ITEM_STACK.setItemMeta(meta);
+		return this;
+	}
+
+	public ItemStackBuilder setCustomModelData(int data) {
+		final ItemMeta meta = ITEM_STACK.getItemMeta();
+		meta.setCustomModelData(data);
 		ITEM_STACK.setItemMeta(meta);
 		return this;
 	}
