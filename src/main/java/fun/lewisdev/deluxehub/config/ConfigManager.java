@@ -10,43 +10,43 @@ import java.util.Map;
 
 public class ConfigManager {
 
-    private Map<ConfigType, ConfigHandler> configurations;
+	private final Map<ConfigType, ConfigHandler> configurations;
 
-    public ConfigManager() {
-        configurations = new HashMap<>();
-    }
+	public ConfigManager() {
+		configurations = new HashMap<>();
+	}
 
-    public void loadFiles(DeluxeHubPlugin plugin) {
+	public void loadFiles(DeluxeHubPlugin plugin) {
 
-        registerFile(ConfigType.SETTINGS, new ConfigHandler(plugin, "config"));
-        registerFile(ConfigType.MESSAGES, new ConfigHandler(plugin, "messages"));
-        registerFile(ConfigType.DATA, new ConfigHandler(plugin, "data"));
-        registerFile(ConfigType.COMMANDS, new ConfigHandler(plugin, "commands"));
+		registerFile(ConfigType.SETTINGS, new ConfigHandler(plugin, "config"));
+		registerFile(ConfigType.MESSAGES, new ConfigHandler(plugin, "messages"));
+		registerFile(ConfigType.DATA, new ConfigHandler(plugin, "data"));
+		registerFile(ConfigType.COMMANDS, new ConfigHandler(plugin, "commands"));
 
-        configurations.values().forEach(ConfigHandler::saveDefaultConfig);
+		configurations.values().forEach(ConfigHandler::saveDefaultConfig);
 
-        Messages.setConfiguration(getFile(ConfigType.MESSAGES).getConfig());
-    }
+		Messages.setConfiguration(getFile(ConfigType.MESSAGES).getConfig());
+	}
 
-    public ConfigHandler getFile(ConfigType type) {
-        return configurations.get(type);
-    }
+	public ConfigHandler getFile(ConfigType type) {
+		return configurations.get(type);
+	}
 
-    public void reloadFiles() {
-        configurations.values().forEach(ConfigHandler::reload);
-        Messages.setConfiguration(getFile(ConfigType.MESSAGES).getConfig());
-    }
+	public void reloadFiles() {
+		configurations.values().forEach(ConfigHandler::reload);
+		Messages.setConfiguration(getFile(ConfigType.MESSAGES).getConfig());
+	}
 
-    public void saveFiles() {
-        getFile(ConfigType.DATA).save();
-    }
+	public void saveFiles() {
+		getFile(ConfigType.DATA).save();
+	}
 
-    public void registerFile(ConfigType type, ConfigHandler config) {
-        configurations.put(type, config);
-    }
+	public void registerFile(ConfigType type, ConfigHandler config) {
+		configurations.put(type, config);
+	}
 
-    public FileConfiguration getFileConfiguration(File file) {
-        return YamlConfiguration.loadConfiguration(file);
-    }
+	public FileConfiguration getFileConfiguration(File file) {
+		return YamlConfiguration.loadConfiguration(file);
+	}
 
 }

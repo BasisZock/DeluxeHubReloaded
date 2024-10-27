@@ -18,52 +18,52 @@ import java.util.UUID;
 
 public class PlayerVanish extends Module {
 
-    private List<UUID> vanished;
+	private List<UUID> vanished;
 
-    public PlayerVanish(DeluxeHubPlugin plugin) {
-        super(plugin, ModuleType.VANISH);
-    }
+	public PlayerVanish(DeluxeHubPlugin plugin) {
+		super(plugin, ModuleType.VANISH);
+	}
 
-    @Override
-    public void onEnable() {
-        vanished = new ArrayList<>();
-    }
+	@Override
+	public void onEnable() {
+		vanished = new ArrayList<>();
+	}
 
-    @Override
-    public void onDisable() {
-        vanished.clear();
-    }
+	@Override
+	public void onDisable() {
+		vanished.clear();
+	}
 
-    public void toggleVanish(Player player) {
-        if (isVanished(player)) {
-            vanished.remove(player.getUniqueId());
-            Bukkit.getOnlinePlayers().forEach(pl -> pl.showPlayer(player));
+	public void toggleVanish(Player player) {
+		if (isVanished(player)) {
+			vanished.remove(player.getUniqueId());
+			Bukkit.getOnlinePlayers().forEach(pl -> pl.showPlayer(player));
 
-            Messages.VANISH_DISABLE.send(player);
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+			Messages.VANISH_DISABLE.send(player);
+			player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 
-        } else {
-            vanished.add(player.getUniqueId());
-            Bukkit.getOnlinePlayers().forEach(pl -> pl.hidePlayer(player));
+		} else {
+			vanished.add(player.getUniqueId());
+			Bukkit.getOnlinePlayers().forEach(pl -> pl.hidePlayer(player));
 
-            Messages.VANISH_ENABLE.send(player);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1));
-        }
-    }
+			Messages.VANISH_ENABLE.send(player);
+			player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1));
+		}
+	}
 
-    public boolean isVanished(Player player) {
-        return vanished.contains(player.getUniqueId());
-    }
+	public boolean isVanished(Player player) {
+		return vanished.contains(player.getUniqueId());
+	}
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        vanished.forEach(hidden -> event.getPlayer().hidePlayer(Bukkit.getPlayer(hidden)));
-    }
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		vanished.forEach(hidden -> event.getPlayer().hidePlayer(Bukkit.getPlayer(hidden)));
+	}
 
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-        vanished.remove(player.getUniqueId());
-    }
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+		vanished.remove(player.getUniqueId());
+	}
 }

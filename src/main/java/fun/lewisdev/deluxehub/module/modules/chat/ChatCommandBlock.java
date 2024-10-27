@@ -14,31 +14,31 @@ import java.util.List;
 
 public class ChatCommandBlock extends Module {
 
-    private List<String> blockedCommands;
+	private List<String> blockedCommands;
 
-    public ChatCommandBlock(DeluxeHubPlugin plugin) {
-        super(plugin, ModuleType.COMMAND_BLOCK);
-    }
+	public ChatCommandBlock(DeluxeHubPlugin plugin) {
+		super(plugin, ModuleType.COMMAND_BLOCK);
+	}
 
-    @Override
-    public void onEnable() {
-        blockedCommands = getConfig(ConfigType.SETTINGS).getStringList("command_block.blocked_commands");
-    }
+	@Override
+	public void onEnable() {
+		blockedCommands = getConfig(ConfigType.SETTINGS).getStringList("command_block.blocked_commands");
+	}
 
-    @Override
-    public void onDisable() {
-    }
+	@Override
+	public void onDisable() {
+	}
 
-    @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        Player player = event.getPlayer();
+	@EventHandler
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		Player player = event.getPlayer();
 
-        if (inDisabledWorld(player.getLocation()) || player.hasPermission(Permissions.BLOCKED_COMMANDS_BYPASS.getPermission()))
-            return;
+		if (inDisabledWorld(player.getLocation()) || player.hasPermission(Permissions.BLOCKED_COMMANDS_BYPASS.getPermission()))
+			return;
 
-        if (blockedCommands.contains(event.getMessage().toLowerCase())) {
-            event.setCancelled(true);
-            Messages.COMMAND_BLOCKED.send(player);
-        }
-    }
+		if (blockedCommands.contains(event.getMessage().toLowerCase())) {
+			event.setCancelled(true);
+			Messages.COMMAND_BLOCKED.send(player);
+		}
+	}
 }

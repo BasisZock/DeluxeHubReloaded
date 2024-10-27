@@ -26,13 +26,12 @@ public class BuildMode implements Listener {
 	private static BuildMode _instance;
 	private final DeluxeHubPlugin _plugin;
 	private final ArrayList<UUID> _players = new ArrayList<>();
-	private boolean _actionbar_enabled = true;
-
-	private boolean _invertedWorlds = false;
 	private final List<String> _worlds;
+	private boolean _actionbar_enabled = true;
+	private boolean _invertedWorlds = false;
 
 
-	public BuildMode(){
+	public BuildMode() {
 		_instance = this;
 		this._plugin = DeluxeHubPlugin.getPlugin(DeluxeHubPlugin.class);
 		this.runScheduler();
@@ -44,20 +43,27 @@ public class BuildMode implements Listener {
 		this._plugin.getServer().getPluginManager().registerEvents(this, _plugin);
 	}
 
-	public void runScheduler(){
-		new BukkitRunnable(){
+	public static BuildMode getInstance() {
+		if (_instance == null) {
+			_instance = new BuildMode();
+		}
+		return _instance;
+	}
+
+	public void runScheduler() {
+		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if(_plugin.getServer().getOnlinePlayers().isEmpty()) return;
-				for(Player p : _plugin.getServer().getOnlinePlayers()){
-					if(_players.contains(p.getUniqueId())){
-						if(!isInPermittedWorld(p.getLocation().getWorld().getName())){
+				if (_plugin.getServer().getOnlinePlayers().isEmpty()) return;
+				for (Player p : _plugin.getServer().getOnlinePlayers()) {
+					if (_players.contains(p.getUniqueId())) {
+						if (!isInPermittedWorld(p.getLocation().getWorld().getName())) {
 							p.getInventory().clear();
 							removePlayer(p.getUniqueId());
 							continue;
 						}
-						if(p.getGameMode() != GameMode.CREATIVE) p.setGameMode(GameMode.CREATIVE);
-						if(_actionbar_enabled)
+						if (p.getGameMode() != GameMode.CREATIVE) p.setGameMode(GameMode.CREATIVE);
+						if (_actionbar_enabled)
 							p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().appendLegacy(Messages.BUILD_MODE_ENABLED_ACTIONBAR.toString().replaceAll("&", "§")).create());
 					}
 				}
@@ -66,49 +72,42 @@ public class BuildMode implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void PlayerJoin(PlayerJoinEvent event){
+	public void PlayerJoin(PlayerJoinEvent event) {
 		Player p = event.getPlayer();
-		if(p.hasPermission(Permissions.BUILDMODE_DEFAULT.getPermission())){
+		if (p.hasPermission(Permissions.BUILDMODE_DEFAULT.getPermission())) {
 			addPlayer(p);
 		}
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void PlayerQuit(PlayerQuitEvent event){
+	public void PlayerQuit(PlayerQuitEvent event) {
 		final UUID uuid = event.getPlayer().getUniqueId();
-		if(isPresent(uuid)) removePlayer(uuid);
+		if (isPresent(uuid)) removePlayer(uuid);
 	}
 
-	public void addPlayer(Player player){
+	public void addPlayer(Player player) {
 		_players.add(player.getUniqueId());
 		player.getInventory().clear();
 		player.setGameMode(GameMode.CREATIVE);
 		player.getInventory().setHeldItemSlot(0);
 	}
 
-	public void removePlayer(UUID uuid){
+	public void removePlayer(UUID uuid) {
 		Player player = _plugin.getServer().getPlayer(uuid);
 		if (player == null) return;
 		player.getInventory().clear();
 		_players.remove(uuid);
-		if(player.isOnline()){
+		if (player.isOnline()) {
 			player.setGameMode(GameMode.SURVIVAL);
 			((HotbarManager) _plugin.getModuleManager().getModule(ModuleType.HOTBAR_ITEMS)).giveItems(player);
 		}
 	}
 
-	public boolean isPresent(UUID uuid){
+	public boolean isPresent(UUID uuid) {
 		return _players.contains(uuid);
 	}
 
-	public boolean isInPermittedWorld(String world){
+	public boolean isInPermittedWorld(String world) {
 		return _invertedWorlds == _worlds.contains(world);
-	}
-
-	public static BuildMode getInstance() {
-		if(_instance == null){
-			_instance = new BuildMode();
-		}
-		return _instance;
 	}
 }

@@ -22,91 +22,91 @@ import java.util.Objects;
 
 public class HotbarManager extends Module {
 
-    private List<HotbarItem> hotbarItems;
+	private List<HotbarItem> hotbarItems;
 
-    public HotbarManager(DeluxeHubPlugin plugin) {
-        super(plugin, ModuleType.HOTBAR_ITEMS);
-    }
+	public HotbarManager(DeluxeHubPlugin plugin) {
+		super(plugin, ModuleType.HOTBAR_ITEMS);
+	}
 
-    @Override
-    public void onEnable() {
-        hotbarItems = new ArrayList<>();
-        FileConfiguration config = getConfig(ConfigType.SETTINGS);
+	@Override
+	public void onEnable() {
+		hotbarItems = new ArrayList<>();
+		FileConfiguration config = getConfig(ConfigType.SETTINGS);
 
-        if (config.getBoolean("hotbar.joinslot")) {
-            int joinSlot = config.getInt("hotbar.slot_number");
+		if (config.getBoolean("hotbar.joinslot")) {
+			int joinSlot = config.getInt("hotbar.slot_number");
 
-            Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-                @EventHandler
-                public void onPlayerJoin(PlayerJoinEvent event) {
-                    Player player = event.getPlayer();
-                    // Setze den Hotbar-Slot des Spielers
-                    player.getInventory().setHeldItemSlot(joinSlot);
-                }
-            }, getPlugin());
-        }
+			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
+				@EventHandler
+				public void onPlayerJoin(PlayerJoinEvent event) {
+					Player player = event.getPlayer();
+					// Setze den Hotbar-Slot des Spielers
+					player.getInventory().setHeldItemSlot(joinSlot);
+				}
+			}, getPlugin());
+		}
 
 
-        if (config.getBoolean("custom_join_items.enabled")) {
+		if (config.getBoolean("custom_join_items.enabled")) {
 
-            for (String entry : Objects.requireNonNull(config.getConfigurationSection("custom_join_items.items")).getKeys(false)) {
-                ItemStack item = ItemStackBuilder.getItemStack(config.getConfigurationSection("custom_join_items.items." + entry)).build();
-                CustomItem customItem = new CustomItem(this, item, config.getInt("custom_join_items.items." + entry + ".slot"), entry);
+			for (String entry : Objects.requireNonNull(config.getConfigurationSection("custom_join_items.items")).getKeys(false)) {
+				ItemStack item = ItemStackBuilder.getItemStack(config.getConfigurationSection("custom_join_items.items." + entry)).build();
+				CustomItem customItem = new CustomItem(this, item, config.getInt("custom_join_items.items." + entry + ".slot"), entry);
 
-                if (config.contains("custom_join_items.items." + entry + ".permission")) {
-                    customItem.setPermission(config.getString("custom_join_items.items." + entry + ".permission"));
-                }
+				if (config.contains("custom_join_items.items." + entry + ".permission")) {
+					customItem.setPermission(config.getString("custom_join_items.items." + entry + ".permission"));
+				}
 
-                customItem.setConfigurationSection(config.getConfigurationSection("custom_join_items.items." + entry));
-                customItem.setAllowMovement(config.getBoolean("custom_join_items.disable_inventory_movement"));
-                registerHotbarItem(customItem);
-            }
+				customItem.setConfigurationSection(config.getConfigurationSection("custom_join_items.items." + entry));
+				customItem.setAllowMovement(config.getBoolean("custom_join_items.disable_inventory_movement"));
+				registerHotbarItem(customItem);
+			}
 
-        }
+		}
 
-        if (config.getBoolean("player_hider.enabled")) {
-            ItemStack item = ItemStackBuilder.getItemStack(config.getConfigurationSection("player_hider.not_hidden")).build();
-            PlayerHider playerHider = new PlayerHider(this, item, config.getInt("player_hider.slot"), "PLAYER_HIDER");
+		if (config.getBoolean("player_hider.enabled")) {
+			ItemStack item = ItemStackBuilder.getItemStack(config.getConfigurationSection("player_hider.not_hidden")).build();
+			PlayerHider playerHider = new PlayerHider(this, item, config.getInt("player_hider.slot"), "PLAYER_HIDER");
 
-            playerHider.setAllowMovement(config.getBoolean("player_hider.disable_inventory_movement"));
+			playerHider.setAllowMovement(config.getBoolean("player_hider.disable_inventory_movement"));
 
-            registerHotbarItem(playerHider);
-        }
+			registerHotbarItem(playerHider);
+		}
 
-        giveItems();
-    }
+		giveItems();
+	}
 
-    @Override
-    public void onDisable() {
-        removeItems();
-    }
+	@Override
+	public void onDisable() {
+		removeItems();
+	}
 
-    public List<HotbarItem> getHotbarItems() {
-        return hotbarItems;
-    }
+	public List<HotbarItem> getHotbarItems() {
+		return hotbarItems;
+	}
 
-    public void registerHotbarItem(HotbarItem hotbarItem) {
-        getPlugin().getServer().getPluginManager().registerEvents(hotbarItem, getPlugin());
-        hotbarItems.add(hotbarItem);
-    }
+	public void registerHotbarItem(HotbarItem hotbarItem) {
+		getPlugin().getServer().getPluginManager().registerEvents(hotbarItem, getPlugin());
+		hotbarItems.add(hotbarItem);
+	}
 
-	public void giveItems(Player player){
+	public void giveItems(Player player) {
 		hotbarItems.stream()
 				.filter(p -> !inDisabledWorld(player.getLocation()) && !BuildMode.getInstance().isPresent(player.getUniqueId()))
 				.forEach(hotbarItem -> hotbarItem.giveItem(player));
 	}
 
-    private void giveItems() {
-        Bukkit.getOnlinePlayers().stream()
+	private void giveItems() {
+		Bukkit.getOnlinePlayers().stream()
 				.filter(player -> !inDisabledWorld(player.getLocation())
 						&& !BuildMode.getInstance().isPresent(player.getUniqueId()))
 				.forEach(player -> hotbarItems.forEach(hotbarItem -> hotbarItem.giveItem(player)));
-    }
+	}
 
-    private void removeItems() {
-        Bukkit.getOnlinePlayers().stream()
+	private void removeItems() {
+		Bukkit.getOnlinePlayers().stream()
 				.filter(player -> !inDisabledWorld(player.getLocation()))
 				.forEach(player -> hotbarItems.forEach(hotbarItem -> hotbarItem.removeItem(player)));
-    }
+	}
 
 }

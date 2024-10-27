@@ -13,31 +13,31 @@ import org.bukkit.entity.Player;
 
 public class VanishCommand {
 
-    private DeluxeHubPlugin plugin;
+	private final DeluxeHubPlugin plugin;
 
-    public VanishCommand(DeluxeHubPlugin plugin) {
-        this.plugin = plugin;
-    }
+	public VanishCommand(DeluxeHubPlugin plugin) {
+		this.plugin = plugin;
+	}
 
-    @Command(
-            aliases = {"vanish"},
-            desc = "Disappear into thin air!"
-    )
-    public void vanish(final CommandContext args, final CommandSender sender) throws CommandException {
+	@Command(
+			aliases = {"vanish"},
+			desc = "Disappear into thin air!"
+	)
+	public void vanish(final CommandContext args, final CommandSender sender) throws CommandException {
 
-        if (!sender.hasPermission(Permissions.COMMAND_VANISH.getPermission())) {
-            Messages.NO_PERMISSION.send(sender);
-            return;
-        }
+		if (!sender.hasPermission(Permissions.COMMAND_VANISH.getPermission())) {
+			Messages.NO_PERMISSION.send(sender);
+			return;
+		}
 
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Console cannot set the spawn location.");
-            return;
-        }
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("Console cannot set the spawn location.");
+			return;
+		}
 
-        Player player = (Player) sender;
-        PlayerVanish vanishModule = ((PlayerVanish) plugin.getModuleManager().getModule(ModuleType.VANISH));
-        vanishModule.toggleVanish(player);
-    }
+		Player player = (Player) sender;
+		PlayerVanish vanishModule = ((PlayerVanish) plugin.getModuleManager().getModule(ModuleType.VANISH));
+		vanishModule.toggleVanish(player);
+	}
 
 }

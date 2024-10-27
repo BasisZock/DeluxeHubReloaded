@@ -4,6 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 public interface HeadHook {
 
-    ItemStack getHead(String data);
+	ItemStack getHead(String data);
 
 }

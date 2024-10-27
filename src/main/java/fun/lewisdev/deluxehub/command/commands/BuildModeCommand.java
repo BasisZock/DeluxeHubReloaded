@@ -12,7 +12,8 @@ import org.bukkit.entity.Player;
 
 public class BuildModeCommand {
 
-	public BuildModeCommand(DeluxeHubPlugin plugin){}
+	public BuildModeCommand(DeluxeHubPlugin plugin) {
+	}
 
 	@Command(
 			aliases = {"buildmode"},
@@ -28,7 +29,7 @@ public class BuildModeCommand {
 		Player player = (Player) sender;
 		BuildMode bm = BuildMode.getInstance();
 
-		if(bm.isPresent(player.getUniqueId())){
+		if (bm.isPresent(player.getUniqueId())) {
 			bm.removePlayer(player.getUniqueId());
 			player.setAllowFlight(true);
 			Messages.BUILD_MODE_DISABLED.send(player);

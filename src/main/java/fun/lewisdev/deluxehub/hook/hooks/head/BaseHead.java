@@ -21,16 +21,16 @@ import java.util.regex.Pattern;
 
 public class BaseHead implements PluginHook, HeadHook {
 
-    private Map<String, ItemStack> cache;
+	private Map<String, ItemStack> cache;
 
-    @Override
-    public void onEnable(DeluxeHubPlugin plugin) {
-        cache = new HashMap<>();
-    }
+	@Override
+	public void onEnable(DeluxeHubPlugin plugin) {
+		cache = new HashMap<>();
+	}
 
-    @Override
-    public ItemStack getHead(String data) {
-        if (cache.containsKey(data)) return cache.get(data);
+	@Override
+	public ItemStack getHead(String data) {
+		if (cache.containsKey(data)) return cache.get(data);
 
 		String decodedBase = new String(Base64.getDecoder().decode(data), StandardCharsets.UTF_8);
 		Pattern pattern = Pattern.compile("\"url\"\\s*:\\s*\"([^\"]+)\"");
@@ -38,18 +38,18 @@ public class BaseHead implements PluginHook, HeadHook {
 
 		ItemStack head = XMaterial.PLAYER_HEAD.parseItem();
 		SkullMeta meta = (SkullMeta) head.getItemMeta();
-		if(matcher.find()){
+		if (matcher.find()) {
 			PlayerProfile playerProfile = Bukkit.createPlayerProfile(UUID.randomUUID(), "");
-			try{
+			try {
 				URL url = URI.create(matcher.group(1)).toURL();
 				playerProfile.getTextures().setSkin(url);
 				meta.setOwnerProfile(playerProfile);
 				head.setItemMeta(meta);
-			}catch(IllegalArgumentException | SecurityException | MalformedURLException e){
+			} catch (IllegalArgumentException | SecurityException | MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
 		cache.put(data, head);
 		return head;
-    }
+	}
 }

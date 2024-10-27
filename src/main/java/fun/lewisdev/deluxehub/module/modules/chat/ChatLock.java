@@ -12,37 +12,37 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatLock extends Module {
 
-    private boolean isChatLocked;
+	private boolean isChatLocked;
 
-    public ChatLock(DeluxeHubPlugin plugin) {
-        super(plugin, ModuleType.CHAT_LOCK);
-    }
+	public ChatLock(DeluxeHubPlugin plugin) {
+		super(plugin, ModuleType.CHAT_LOCK);
+	}
 
-    @Override
-    public void onEnable() {
-        isChatLocked = getPlugin().getConfigManager().getFile(ConfigType.DATA).getConfig().getBoolean("chat_locked");
-    }
+	@Override
+	public void onEnable() {
+		isChatLocked = getPlugin().getConfigManager().getFile(ConfigType.DATA).getConfig().getBoolean("chat_locked");
+	}
 
-    @Override
-    public void onDisable() {
-        getPlugin().getConfigManager().getFile(ConfigType.DATA).getConfig().set("chat_locked", isChatLocked);
-    }
+	@Override
+	public void onDisable() {
+		getPlugin().getConfigManager().getFile(ConfigType.DATA).getConfig().set("chat_locked", isChatLocked);
+	}
 
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
+	@EventHandler
+	public void onPlayerChat(AsyncPlayerChatEvent event) {
+		Player player = event.getPlayer();
 
-        if (!isChatLocked || player.hasPermission(Permissions.LOCK_CHAT_BYPASS.getPermission())) return;
+		if (!isChatLocked || player.hasPermission(Permissions.LOCK_CHAT_BYPASS.getPermission())) return;
 
-        event.setCancelled(true);
-        Messages.CHAT_LOCKED.send(player);
-    }
+		event.setCancelled(true);
+		Messages.CHAT_LOCKED.send(player);
+	}
 
-    public boolean isChatLocked() {
-        return isChatLocked;
-    }
+	public boolean isChatLocked() {
+		return isChatLocked;
+	}
 
-    public void setChatLocked(boolean chatLocked) {
-        isChatLocked = chatLocked;
-    }
+	public void setChatLocked(boolean chatLocked) {
+		isChatLocked = chatLocked;
+	}
 }

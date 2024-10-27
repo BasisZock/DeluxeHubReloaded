@@ -22,19 +22,20 @@ public class StaticTime extends Module {
 		runScheduler();
 	}
 
-	private void runScheduler(){
+	private void runScheduler() {
 		final DeluxeHubPlugin plugin = DeluxeHubPlugin.getPlugin(DeluxeHubPlugin.class);
-		new BukkitRunnable(){
+		new BukkitRunnable() {
 			@Override
 			public void run() {
-				Bukkit.getWorlds().forEach(world->{
-					if(plugin.getModuleManager().getDisabledWorlds().contains(world.getName())) return;
-					if(world.getTime() != _time) world.setTime(_time);
+				Bukkit.getWorlds().forEach(world -> {
+					if (plugin.getModuleManager().getDisabledWorlds().contains(world.getName())) return;
+					if (world.getTime() != _time) world.setTime(_time);
 				});
 			}
 		}.runTaskTimer(plugin, 2L, 2L);
 	}
 
 	@Override
-	public void onDisable() {}
+	public void onDisable() {
+	}
 }
