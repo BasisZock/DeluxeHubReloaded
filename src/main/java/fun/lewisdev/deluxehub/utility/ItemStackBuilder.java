@@ -28,17 +28,7 @@ public class ItemStackBuilder {
 		this.ITEM_STACK = item;
 	}
 
-	public static ItemStackBuilder getItemStack(ConfigurationSection section, Player player) {
-		ItemStack item = XMaterial.matchXMaterial(section.getString("material").toUpperCase()).get().parseItem();
-
-		if (item.getType() == XMaterial.PLAYER_HEAD.parseMaterial()) {
-			if (section.contains("base64")) {
-				item = ((HeadHook) PLUGIN.getHookManager().getPluginHook("BASE64")).getHead(section.getString("base64")).clone();
-			} else if (section.contains("hdb") && PLUGIN.getHookManager().isHookEnabled("HEAD_DATABASE")) {
-				item = ((HeadHook) PLUGIN.getHookManager().getPluginHook("HEAD_DATABASE")).getHead(section.getString("hdb"));
-			}
-		}
-
+	public static ItemStackBuilder getItemStack(ItemStack item, ConfigurationSection section, Player player) {
 		ItemStackBuilder builder = new ItemStackBuilder(item);
 
 		if (section.contains("amount")) {
@@ -103,6 +93,20 @@ public class ItemStackBuilder {
 		}
 
 		return builder;
+	}
+
+	public static ItemStackBuilder getItemStack(ConfigurationSection section, Player player){
+		ItemStack item = XMaterial.matchXMaterial(section.getString("material").toUpperCase()).get().parseItem();
+
+		if (item.getType() == XMaterial.PLAYER_HEAD.parseMaterial()) {
+			if (section.contains("base64")) {
+				item = ((HeadHook) PLUGIN.getHookManager().getPluginHook("BASE64")).getHead(section.getString("base64")).clone();
+			} else if (section.contains("hdb") && PLUGIN.getHookManager().isHookEnabled("HEAD_DATABASE")) {
+				item = ((HeadHook) PLUGIN.getHookManager().getPluginHook("HEAD_DATABASE")).getHead(section.getString("hdb"));
+			}
+		}
+
+		return getItemStack(item, section, player);
 	}
 
 	public static ItemStackBuilder getItemStack(ConfigurationSection section) {
@@ -242,6 +246,14 @@ public class ItemStackBuilder {
 		} else {
 			throw new IllegalArgumentException("withColor is only applicable for leather armor!");
 		}
+	}
+
+	public ItemStackBuilder addPartialData(ConfigurationSection section){
+		return getItemStack(ITEM_STACK, section, null);
+	}
+
+	public ItemStackBuilder addPartialData(ConfigurationSection section, Player player){
+		return getItemStack(ITEM_STACK, section, player);
 	}
 
 	public ItemStack build() {
