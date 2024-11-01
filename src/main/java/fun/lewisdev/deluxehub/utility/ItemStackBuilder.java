@@ -88,6 +88,20 @@ public class ItemStackBuilder {
 			builder.withFlags(flags.toArray(new ItemFlag[0]));
 		}
 
+		if(section.contains("enchantments")) {
+			ConfigurationSection enchantments = section.getConfigurationSection("enchantments");
+			if(enchantments != null) {
+				enchantments.getKeys(false).forEach(key -> {
+					Enchantment enchantment = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(key));
+					if(enchantment != null) {
+						builder.withEnchantment(enchantment, enchantments.getInt(key));
+					}else{
+						PLUGIN.getLogger().warning("Enchantment " + key + " not found!");
+					}
+				});
+			}
+		}
+
 		return builder;
 	}
 
