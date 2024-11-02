@@ -5,10 +5,7 @@ import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.module.modules.chat.*;
 import fun.lewisdev.deluxehub.module.modules.hologram.HologramManager;
 import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarManager;
-import fun.lewisdev.deluxehub.module.modules.player.DoubleJump;
-import fun.lewisdev.deluxehub.module.modules.player.PlayerListener;
-import fun.lewisdev.deluxehub.module.modules.player.PlayerOffHandSwap;
-import fun.lewisdev.deluxehub.module.modules.player.PlayerVanish;
+import fun.lewisdev.deluxehub.module.modules.player.*;
 import fun.lewisdev.deluxehub.module.modules.visual.scoreboard.ScoreboardManager;
 import fun.lewisdev.deluxehub.module.modules.visual.tablist.TablistManager;
 import fun.lewisdev.deluxehub.module.modules.world.*;
@@ -42,6 +39,7 @@ public class ModuleManager {
 			for (String world : config.getStringList("disabled-worlds.worlds")) disabledWorlds.remove(world);
 		}
 
+		registerModule(new PvPMode(plugin), "pvp_mode.enabled");
 		registerModule(new StaticTime(plugin), "static_time.enabled");
 		registerModule(new AntiWorldDownloader(plugin), "anti_wdl.enabled");
 		registerModule(new DoubleJump(plugin), "double_jump.enabled");
