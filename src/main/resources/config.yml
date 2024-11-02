@@ -407,3 +407,45 @@ player_hider:
     display_name: '&dPlayers &8&l> &cHidden &7(Right-Click)'
     lore:
       - '&7Click to show all players!'
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | PVP MODE                                 |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+pvp_mode:
+  enabled: true
+  # Slot the item should be given to?
+  slot: 7
+  # Time to enable/disable PVP Mode
+  time_to_toggle: 5
+  switcher:
+    material: DIAMOND_SWORD
+    amount: 1
+    pvp_on:
+      display_name: '&cPvP Mode &8&l> &aEnabled &7(Right-Click)'
+      lore:
+        - '&7Hold for 5 seconds to &cdisable&7 PvP mode!'
+    pvp_off:
+      display_name: '&cPvP Mode &8&l> &cDisabled &7(Right-Click)'
+      lore:
+        - '&7Hold for 5 seconds to &aenable&7 PvP mode!'
+  pvp_items:
+    sword:
+      material: DIAMOND_SWORD
+      amount: 1
+      enchantments:
+        - DAMAGE_ALL: 1
+        - DURABILITY: 3
+        - FIRE_ASPECT: 1
+    helmet:
+      material: DIAMOND_HELMET
+      amount: 1
+    chestplate:
+      material: DIAMOND_CHESTPLATE
+      amount: 1
+    leggings:
+      material: DIAMOND_LEGGINGS
+      amount: 1
+    boots:
+      material: DIAMOND_BOOTS
+      amount: 1
+
