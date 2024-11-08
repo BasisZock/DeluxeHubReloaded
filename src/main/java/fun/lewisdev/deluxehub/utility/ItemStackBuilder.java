@@ -17,7 +17,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemStackBuilder {
 
@@ -83,16 +85,18 @@ public class ItemStackBuilder {
 		}
 
 		if(section.contains("enchantments")) {
-			ConfigurationSection enchantments = section.getConfigurationSection("enchantments");
-			if(enchantments != null) {
-				enchantments.getKeys(false).forEach(key -> {
-					Enchantment enchantment = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(key));
-					if(enchantment != null) {
-						builder.withEnchantment(enchantment, enchantments.getInt(key));
-					}else{
-						PLUGIN.getLogger().warning("Enchantment " + key + " not found!");
+			List<LinkedHashMap<String, Integer>> enchantments = (List<LinkedHashMap<String, Integer>>) section.getList("enchantments");
+			for (LinkedHashMap<String, Integer> enchantmentMap : enchantments) {
+				for (Map.Entry<String, Integer> entry : enchantmentMap.entrySet()) {
+					String enchantmentName = entry.getKey();
+					int level = entry.getValue();
+					Enchantment enchantment = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(enchantmentName.toLowerCase()));
+					if (enchantment != null) {
+						builder.withEnchantment(enchantment, level);
+					} else {
+						PLUGIN.getLogger().warning("Enchantment " + enchantmentName + " not found!");
 					}
-				});
+				}
 			}
 		}
 
@@ -207,25 +211,22 @@ public class ItemStackBuilder {
 	}
 
 	public ItemStackBuilder withEnchantment(Enchantment enchantment, final int level) {
-		ITEM_STACK.addUnsafeEnchantment(enchantment, level);
+		final ItemMeta im = ITEM_STACK.getItemMeta();
+		if(im == null) return this;
+		im.addEnchant(enchantment, level, true);
+		ITEM_STACK.setItemMeta(im);
 		return this;
 	}
 
 	public ItemStackBuilder withEnchantment(Enchantment enchantment) {
-		ITEM_STACK.addUnsafeEnchantment(enchantment, 1);
-		return this;
+		return withEnchantment(enchantment, 1);
 	}
 
 	public ItemStackBuilder withGlow() {
 		final ItemMeta meta = ITEM_STACK.getItemMeta();
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		ITEM_STACK.setItemMeta(meta);
-		Enchantment infinity = Registry.ENCHANTMENT.get(NamespacedKey.minecraft("infinity"));
-		if (infinity == null) {
-			throw new NullPointerException("infinity enchantment");
-		}
-		ITEM_STACK.addUnsafeEnchantment(infinity, 1);
-		return this;
+		return withEnchantment(Enchantment.INFINITY, 1);
 	}
 
 	public ItemStackBuilder withType(Material material) {
