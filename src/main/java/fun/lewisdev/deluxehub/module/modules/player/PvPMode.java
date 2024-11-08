@@ -7,16 +7,18 @@ import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarManager;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
@@ -27,7 +29,7 @@ public class PvPMode extends Module {
     private final EnumMap<PvPSwitcherState, ItemStack> _switcher = new EnumMap<>(PvPSwitcherState.class);
     private final EnumMap<PvPItemType, ItemStack> _items = new EnumMap<>(PvPItemType.class);
     private final List<UUID> _players = new ArrayList<>();
-    private final Map<Integer, UUID> _tasks = new HashMap<>();
+    private final Map<UUID, Integer> _tasks = new HashMap<>();
 
     public enum PvPSwitcherState {
         PVP_ON,
@@ -59,7 +61,7 @@ public class PvPMode extends Module {
     @Override
     public void onEnable() {
         ConfigurationSection config = getPlugin().getConfigManager().getFile(ConfigType.SETTINGS).getConfig().getConfigurationSection("pvp_mode");
-        _slot = (short) config.getInt("slot");
+		_slot = (short) config.getInt("slot");
         _time_to_toggle = (short) config.getInt("time_to_toggle");
         ConfigurationSection switcherSection = config.getConfigurationSection("switcher");
         if(switcherSection == null){
@@ -77,24 +79,25 @@ public class PvPMode extends Module {
             for (PvPItemType type : PvPItemType.values()) {
                 ConfigurationSection section = itemsSection.getConfigurationSection(type.name().toLowerCase());
                 if (section != null) {
-                    _items.put(type, ItemStackBuilder.getItemStack(itemsSection).addPartialData(section).build());
+                    _items.put(type, ItemStackBuilder.getItemStack(section).build());
                 }
             }
         }
-        getPlugin().getServer().getPluginManager().registerEvents(this, getPlugin());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent ev) {
         Player player = ev.getPlayer();
         Inventory inv = player.getInventory();
         boolean found = false;
         for (int i = 0; i < 9; i++) {
             int slot = (_slot + i) % 9;
-            if (inv.getItem(slot) != null) continue;
-            _slot = (short) slot;
-            found = true;
-            break;
+			ItemStack item = inv.getItem(slot);
+			if (item == null || (item.hasItemMeta() && item.getItemMeta().getDisplayName().equals(_switcher.get(PvPSwitcherState.PVP_OFF).getItemMeta().getDisplayName()))) {
+				_slot = (short) slot;
+				found = true;
+				break;
+			}
         }
         if (!found) {
             Messages.PVP_MODE_NO_EMPTY_SLOT_FOUND.send(player);
@@ -104,59 +107,107 @@ public class PvPMode extends Module {
         inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onChangeItem(PlayerInteractEvent ev) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onChangeItem(PlayerItemHeldEvent ev) {
         Player player = ev.getPlayer();
-        // Remove task if player switches item
-        if(_tasks.containsValue(player.getUniqueId()) && player.getInventory().getHeldItemSlot() != _slot){
+		UUID pUUID = player.getUniqueId();
+        if(_tasks.containsKey(pUUID)){
             BukkitScheduler scheduler = getPlugin().getServer().getScheduler();
-            int taskId = _tasks.entrySet().stream().filter(entry -> entry.getValue().equals(player.getUniqueId())).findFirst().get().getKey();
+			int taskId = _tasks.get(player.getUniqueId());
             scheduler.cancelTask(taskId);
-            _tasks.remove(taskId);
+            _tasks.remove(pUUID);
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().append(" ").create());
             return;
         }
-        if (!_players.contains(player.getUniqueId())) return;
-        if (ev.getAction() != Action.RIGHT_CLICK_AIR && ev.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        ItemStack item = player.getInventory().getItemInMainHand();
-        if(item == _switcher.get(PvPSwitcherState.PVP_OFF)){
-            ev.setCancelled(true);
-            player.getInventory().setItem(_slot, _switcher.get(PvPSwitcherState.PVP_ON));
-            int taskId = getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
-                if (player.isOnline()) {
-                    _players.add(player.getUniqueId());
-                    player.getInventory().clear();
-                    player.getInventory().setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
-                    for (PvPItemType itemType : PvPItemType.values()) {
-                        if(itemType == PvPItemType.SWORD){
-                            short slot = (short) itemType.getSlot();
-                            while(player.getInventory().getItem(slot) != null){
-                                slot = (short) ((slot + 1) % 9);
-                            }
-                            player.getInventory().setItem(slot, _items.get(itemType));
-                            continue;
-                        }
-                        player.getInventory().setItem(itemType.getSlot(), _items.get(itemType));
-                    }
-                }
-            }, _time_to_toggle * 20).getTaskId();
-            _tasks.put(taskId, player.getUniqueId());
-        }else if(item == _switcher.get(PvPSwitcherState.PVP_ON)){
-            ev.setCancelled(true);
-            int taskId = getPlugin().getServer().getScheduler().runTaskLater(getPlugin(), () -> {
-                if (player.isOnline()) {
-                    _players.remove(player.getUniqueId());
-                    player.getInventory().clear();
-                    player.getInventory().setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
-                    ((HotbarManager) getPlugin().getModuleManager().getModule(ModuleType.HOTBAR_ITEMS)).giveItems(player);
-                }
-            }, _time_to_toggle * 20).getTaskId();
-            _tasks.put(taskId, player.getUniqueId());
+		PlayerInventory inv = player.getInventory();
+        ItemStack item = inv.getItem(ev.getNewSlot());
+		if(item == null) return;
+		if(!item.hasItemMeta()) return;
+		if(!item.getItemMeta().hasDisplayName()) return;
+		if(item.getItemMeta().getDisplayName().equals(Objects.requireNonNull(_switcher.get(PvPSwitcherState.PVP_OFF).getItemMeta()).getDisplayName())){
+			int taskId = getPlugin().getServer().getScheduler().runTaskTimer(getPlugin(), new Runnable() {
+				int timeLeft = _time_to_toggle;
+				@Override
+				public void run() {
+					if(timeLeft > 0){
+						player.spigot().
+								sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().appendLegacy(Messages.PVP_MODE_SWITCH_ON_TIME.toString().replaceAll("&", "§").replace("%time%", ""+timeLeft)).create());
+						timeLeft--;
+					}else {
+						if (player.isOnline()) {
+							_players.add(pUUID);
+							inv.clear();
+							inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_ON));
+							for (PvPItemType itemType : PvPItemType.values()) {
+								ItemStack is = _items.get(itemType);
+								switch (itemType) {
+									case SWORD:
+										short slot = (short) itemType.getSlot();
+										while (inv.getItem(slot) != null) {
+											slot = (short) ((slot + 1) % 9);
+										}
+										inv.setItem(slot, is);
+										inv.setHeldItemSlot(slot);
+										continue;
+									case HELMET:
+										inv.setHelmet(is);
+										break;
+									case CHESTPLATE:
+										inv.setChestplate(is);
+										break;
+									case LEGGINGS:
+										inv.setLeggings(is);
+										break;
+									case BOOTS:
+										inv.setBoots(is);
+										break;
+									default:
+										inv.setItem(itemType.getSlot(), _items.get(itemType));
+								}
+							}
+							inv.clear(_slot);
+							inv.setItem(8, _switcher.get(PvPSwitcherState.PVP_ON));
+							getPlugin().getServer().getScheduler().cancelTask(_tasks.get(pUUID));
+							_tasks.remove(pUUID);
+							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().appendLegacy(Messages.PVP_MODE_LETS_FIGHT.toString().replaceAll("&", "§")).create());
+						}
+					}
+				}
+			}, 0L, 20L).getTaskId();
+            _tasks.put(pUUID, taskId);
+        }else if(item.getItemMeta().getDisplayName().equals(Objects.requireNonNull(_switcher.get(PvPSwitcherState.PVP_ON).getItemMeta()).getDisplayName())){
+            int taskId = getPlugin().getServer().getScheduler().runTaskTimer(getPlugin(), new Runnable() {
+				int timeLeft = _time_to_toggle;
+				@Override
+				public void run() {
+					if (timeLeft > 0) {
+						player.spigot().
+								sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().appendLegacy(Messages.PVP_MODE_SWITCH_OFF_TIME.toString().replaceAll("&", "§").replace("%time%", ""+timeLeft)).create());
+						timeLeft--;
+					} else {
+						if (player.isOnline()) {
+							HotbarManager hotbarManager = (HotbarManager) getPlugin().getModuleManager().getModule(ModuleType.HOTBAR_ITEMS);
+							_players.remove(pUUID);
+							inv.clear();
+							hotbarManager.giveItems(player);
+							inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
+							hotbarManager.changeToJoinSlot(player);
+							getPlugin().getServer().getScheduler().cancelTask(_tasks.get(pUUID));
+							_tasks.remove(pUUID);
+							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().append(" ").create());
+						}
+					}
+				}
+			}, 0L, 20L).getTaskId();
+            _tasks.put(pUUID, taskId);
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onLeave(PlayerQuitEvent ev) {
-        _players.remove(ev.getPlayer().getUniqueId());
+		UUID pUUID = ev.getPlayer().getUniqueId();
+        _players.remove(pUUID);
+		_tasks.remove(pUUID);
     }
 
     @Override
