@@ -421,20 +421,20 @@ pvp_mode:
     material: DIAMOND_SWORD
     amount: 1
     pvp_on:
-      display_name: '&cPvP Mode &8&l> &aEnabled &7(Right-Click)'
+      display_name: '&cPvP Mode &8&l> &aEnabled'
       lore:
         - '&7Hold for 5 seconds to &cdisable&7 PvP mode!'
     pvp_off:
-      display_name: '&cPvP Mode &8&l> &cDisabled &7(Right-Click)'
+      display_name: '&cPvP Mode &8&l> &cDisabled'
       lore:
         - '&7Hold for 5 seconds to &aenable&7 PvP mode!'
-  pvp_items:
+  items:
     sword:
       material: DIAMOND_SWORD
       amount: 1
       enchantments:
-        - DAMAGE_ALL: 1
-        - DURABILITY: 3
+        - SHARPNESS: 1
+        - UNBREAKING: 3
         - FIRE_ASPECT: 1
     helmet:
       material: DIAMOND_HELMET
