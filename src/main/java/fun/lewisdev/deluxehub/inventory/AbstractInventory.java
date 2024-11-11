@@ -2,6 +2,7 @@ package fun.lewisdev.deluxehub.inventory;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
+import fun.lewisdev.deluxehub.utility.NamespacedKeys;
 import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -54,7 +55,7 @@ public abstract class AbstractInventory implements Listener {
 				ItemMeta itemMeta = item.getItemMeta();
 				if (itemMeta != null) {
 					PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
-					if (dataContainer.get(NamespacedKey.fromString("dhub.cgui.playerhead"), PersistentDataType.BOOLEAN) != null) {
+					if (dataContainer.get(NamespacedKeys.Keys.PLAYER_HEAD.get(), PersistentDataType.BOOLEAN) != null) {
 						SkullMeta meta = (SkullMeta) item.getItemMeta();
 						if (meta != null) {
 							meta.setOwnerProfile(player.getPlayerProfile());

@@ -44,7 +44,7 @@ public class ItemStackBuilder {
 				ItemMeta meta = item.getItemMeta();
 				if (meta != null) {
 					PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
-					dataContainer.set(NamespacedKey.fromString("dhub.cgui.playerhead"), PersistentDataType.BOOLEAN, true);
+					dataContainer.set(NamespacedKeys.Keys.PLAYER_HEAD.get(), PersistentDataType.BOOLEAN, true);
 					item.setItemMeta(meta);
 				}
 			}
@@ -266,6 +266,16 @@ public class ItemStackBuilder {
 
 	public ItemStackBuilder addPartialData(ConfigurationSection section, Player player){
 		return getItemStack(ITEM_STACK, section, player);
+	}
+
+	public ItemStackBuilder addNamespacedKey(NamespacedKey key, PersistentDataType type, Object value) {
+		ItemMeta meta = ITEM_STACK.getItemMeta();
+		if (meta != null) {
+			PersistentDataContainer dataContainer = meta.getPersistentDataContainer();
+			dataContainer.set(key, type, value);
+			ITEM_STACK.setItemMeta(meta);
+		}
+		return this;
 	}
 
 	public ItemStack build() {
