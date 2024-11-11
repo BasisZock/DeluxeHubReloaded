@@ -448,4 +448,13 @@ pvp_mode:
     boots:
       material: DIAMOND_BOOTS
       amount: 1
-
+    other:
+      - material: GOLDEN_APPLE
+        amount: 16
+      - material: BOW
+        amount: 1
+        enchantments:
+          - INFINITY: 1
+          - UNBREAKING: 3
+      - material: ARROW
+        amount: 1
