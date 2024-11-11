@@ -90,3 +90,4 @@ Messages:
     SWITCH_ON_TIME: "&7PvP will be &aenabled&7 in &b%time% &7seconds."
     SWITCH_OFF_TIME: "&7PvP will be &cdisabled&7 in &b%time% &7seconds."
     LETS_FIGHT: "&7PvP is now &aenabled&7. &7Let's fight!"
+    VICTIM_NOT_IN_PVP_MODE: "%prefix% &c%victim% is not in PvP mode."
