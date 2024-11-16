@@ -458,3 +458,24 @@ pvp_mode:
           - UNBREAKING: 3
       - material: ARROW
         amount: 1
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | TELEPORTATION BOW                        |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+teleportation_bow:
+  enabled: true
+  # Slot the item should be given to?
+  slot: 6
+  # Should we prevent them from moving/dropping the item?
+  disable_inventory_movement: true
+  #
+  entity: ARROW
+  # Cooldown in seconds between each use
+  cooldown: 60
+  item:
+    name: '&dTeleportation Bow'
+    glow: true
+    lore:
+      - '&7Right-click to teleport to where the arrow lands!'
+      - '&7Cooldown: &d60s'
+      - '&7Range: &d100 blocks'
