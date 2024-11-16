@@ -9,7 +9,8 @@ public class NamespacedKeys{
 		PLAYER_HEAD("dhub.cgui.playerhead"),
 		PVP_MODE_ITEM("dhub.pvpmode.item"),
 		PVP_MODE_SWITCHER("dhub.pvpmode.switcher"),
-		PVP_MODE_SWITCHER_STATE("dhub.pvpmode.switcher.state");
+		PVP_MODE_SWITCHER_STATE("dhub.pvpmode.switcher.state"),
+		TELEPORTATION_BOW("dhub.teleportationbow");
 
 		private final String key;
 
