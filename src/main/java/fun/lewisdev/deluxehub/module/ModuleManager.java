@@ -39,6 +39,7 @@ public class ModuleManager {
 			for (String world : config.getStringList("disabled-worlds.worlds")) disabledWorlds.remove(world);
 		}
 
+		registerModule(new TeleportationBow(plugin), "teleportation_bow.enabled");
 		registerModule(new PvPMode(plugin), "pvp_mode.enabled");
 		registerModule(new StaticTime(plugin), "static_time.enabled");
 		registerModule(new AntiWorldDownloader(plugin), "anti_wdl.enabled");
