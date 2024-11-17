@@ -93,4 +93,4 @@ Messages:
     VICTIM_NOT_IN_PVP_MODE: "%prefix% &c%victim% is not in PvP mode."
 
   TELEPORTATION_BOW:
-    IN_COOLDOWN: "%prefix% &cYou must wait &e%time% &cbefore using this again."
+    IN_COOLDOWN: "%prefix% &cYou must wait &e%time% seconds &cbefore using this again."
