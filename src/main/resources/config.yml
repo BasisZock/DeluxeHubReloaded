@@ -468,7 +468,8 @@ teleportation_bow:
   slot: 6
   # Should we prevent them from moving/dropping the item?
   disable_inventory_movement: true
-  #
+  # Entity to spawn when the bow is used
+  # Available entities: ARROW, ENDER_PEARL, SNOWBALL, EGG, LLAMA_SPIT, SHULKER_BULLET, SPECTRAL_ARROW, TRIDENT
   entity: ARROW
   # Cooldown in seconds between each use
   cooldown: 60
