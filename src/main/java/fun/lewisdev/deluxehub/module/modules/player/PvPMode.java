@@ -236,7 +236,6 @@ public class PvPMode extends Module {
 	public void onItemMove(InventoryClickEvent ev) {
 		if (!(ev.getWhoClicked() instanceof Player)) return;
 		Player player = (Player) ev.getWhoClicked();
-		if(!_players.contains(player.getUniqueId())) return;
 		ItemStack movedItem = ev.getCurrentItem();
 		if(movedItem == null) return;
 		if(!movedItem.hasItemMeta()) return;
