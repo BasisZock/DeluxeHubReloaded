@@ -94,3 +94,4 @@ Messages:
 
   TELEPORTATION_BOW:
     IN_COOLDOWN: "%prefix% &cYou must wait &e%time% seconds &cbefore using this again."
+    MAX_DISTANCE_REACHED: "%prefix% &cMax distance reached. You can't teleport further."
