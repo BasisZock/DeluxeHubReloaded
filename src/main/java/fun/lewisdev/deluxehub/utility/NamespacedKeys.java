@@ -10,7 +10,7 @@ public class NamespacedKeys{
 		PVP_MODE_ITEM("dhub.pvpmode.item"),
 		PVP_MODE_SWITCHER("dhub.pvpmode.switcher"),
 		PVP_MODE_SWITCHER_STATE("dhub.pvpmode.switcher.state"),
-		TELEPORTATION_BOW("dhub.teleportationbow");
+		TELEPORTATION_BOW_ITEM("dhub.teleportationbow");
 
 		private final String key;
 
