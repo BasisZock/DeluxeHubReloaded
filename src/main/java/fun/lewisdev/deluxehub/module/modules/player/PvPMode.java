@@ -216,9 +216,11 @@ public class PvPMode extends Module {
 					} else {
 						if (player.isOnline()) {
 							HotbarManager hotbarManager = (HotbarManager) getPlugin().getModuleManager().getModule(ModuleType.HOTBAR_ITEMS);
+							TeleportationBow tpBow = (TeleportationBow) getPlugin().getModuleManager().getModule(ModuleType.TELEPORTATION_BOW);
 							_players.remove(pUUID);
 							inv.clear();
 							hotbarManager.giveItems(player);
+							tpBow.giveItem(player);
 							inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
 							hotbarManager.changeToJoinSlot(player);
 							getPlugin().getServer().getScheduler().cancelTask(_tasks.get(pUUID));
@@ -323,12 +325,12 @@ public class PvPMode extends Module {
 	private void giveSwitcher(Player player){
 		Inventory inv = player.getInventory();
 		boolean found = false;
+		int slot = -1;
 		for (int i = 0; i < 9; i++) {
-			int slot = (_slot + i) % 9;
+			slot = (_slot + i) % 9;
 			ItemStack item = inv.getItem(slot);
 			if (item == null ||
 				(item.hasItemMeta() && (!item.getItemMeta().getPersistentDataContainer().isEmpty() && Boolean.FALSE.equals(item.getItemMeta().getPersistentDataContainer().get(NamespacedKeys.Keys.PVP_MODE_SWITCHER_STATE.get(), PersistentDataType.BOOLEAN))))) {
-				_slot = (short) slot;
 				found = true;
 				break;
 			}
@@ -338,7 +340,7 @@ public class PvPMode extends Module {
 			getPlugin().getLogger().warning("No empty slot found for PvPMode switcher for player " + player.getName());
 			return;
 		}
-		inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
+		inv.setItem(slot, _switcher.get(PvPSwitcherState.PVP_OFF));
 	}
 
     @Override
