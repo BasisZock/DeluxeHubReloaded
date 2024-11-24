@@ -466,6 +466,7 @@ teleportation_bow:
   enabled: true
   # Slot the item should be given to?
   slot: 6
+  arrow_slot: 35
   # Should we prevent them from moving/dropping the item?
   disable_inventory_movement: true
   # Entity to spawn when the bow is used
@@ -473,10 +474,15 @@ teleportation_bow:
   entity: ARROW
   # Cooldown in seconds between each use
   cooldown: 60
+  max_range: 100
   item:
-    name: '&dTeleportation Bow'
+    display_name: '&dTeleportation Bow'
     glow: true
     lore:
       - '&7Right-click to teleport to where the arrow lands!'
       - '&7Cooldown: &d60s'
       - '&7Range: &d100 blocks'
+  arrow:
+    display_name: '&dTeleportation Arrow'
+    lore:
+      - '&dWhat a beautiful arrow!'
