@@ -278,6 +278,15 @@ public class ItemStackBuilder {
 		return this;
 	}
 
+	public ItemStackBuilder setUnbreakable(boolean unbreakable) {
+		ItemMeta meta = ITEM_STACK.getItemMeta();
+		if (meta != null) {
+			meta.setUnbreakable(unbreakable);
+			ITEM_STACK.setItemMeta(meta);
+		}
+		return this;
+	}
+
 	public ItemStack build() {
 		return ITEM_STACK;
 	}
