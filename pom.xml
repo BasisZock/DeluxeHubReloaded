@@ -6,7 +6,7 @@
 
     <groupId>fun.lewisdev</groupId>
     <artifactId>DeluxeHubReloaded-1.21-1.21.3</artifactId>
-    <version>3.6.8-dev</version>
+    <version>3.6.8</version>
     <packaging>jar</packaging>
 
     <name>DeluxeHubReloaded</name>
