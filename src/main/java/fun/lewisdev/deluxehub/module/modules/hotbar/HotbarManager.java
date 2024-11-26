@@ -23,9 +23,15 @@ import java.util.Objects;
 public class HotbarManager extends Module {
 
 	private List<HotbarItem> hotbarItems;
+	private int _joinSlot;
 
 	public HotbarManager(DeluxeHubPlugin plugin) {
 		super(plugin, ModuleType.HOTBAR_ITEMS);
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		changeToJoinSlot(event.getPlayer());
 	}
 
 	@Override
@@ -34,18 +40,8 @@ public class HotbarManager extends Module {
 		FileConfiguration config = getConfig(ConfigType.SETTINGS);
 
 		if (config.getBoolean("hotbar.joinslot")) {
-			int joinSlot = config.getInt("hotbar.slot_number");
-
-			Bukkit.getServer().getPluginManager().registerEvents(new Listener() {
-				@EventHandler
-				public void onPlayerJoin(PlayerJoinEvent event) {
-					Player player = event.getPlayer();
-					// Setze den Hotbar-Slot des Spielers
-					player.getInventory().setHeldItemSlot(joinSlot);
-				}
-			}, getPlugin());
+			_joinSlot = config.getInt("hotbar.slot_number");
 		}
-
 
 		if (config.getBoolean("custom_join_items.enabled")) {
 
@@ -88,6 +84,10 @@ public class HotbarManager extends Module {
 	public void registerHotbarItem(HotbarItem hotbarItem) {
 		getPlugin().getServer().getPluginManager().registerEvents(hotbarItem, getPlugin());
 		hotbarItems.add(hotbarItem);
+	}
+
+	public void changeToJoinSlot(Player player) {
+		player.getInventory().setHeldItemSlot(_joinSlot);
 	}
 
 	public void giveItems(Player player) {

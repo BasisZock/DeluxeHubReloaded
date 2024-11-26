@@ -10,6 +10,7 @@ import fun.lewisdev.deluxehub.cooldown.CooldownType;
 import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.hologram.Hologram;
+import fun.lewisdev.deluxehub.module.modules.player.PvPMode;
 import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -290,20 +291,31 @@ public class WorldProtect extends Module {
 		Player player = (Player) event.getEntity();
 		if (inDisabledWorld(player.getLocation())) return;
 		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
-
+		PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
 		EntityDamageEvent.DamageCause cause = event.getCause();
-		if (fallDamage && cause == EntityDamageEvent.DamageCause.FALL) event.setCancelled(true);
-		else if (playerDrowning && cause == EntityDamageEvent.DamageCause.DROWNING) event.setCancelled(true);
-		else if (fireDamage && (cause == EntityDamageEvent.DamageCause.FIRE || cause == EntityDamageEvent.DamageCause.FIRE_TICK || cause == EntityDamageEvent.DamageCause.LAVA))
-			event.setCancelled(true);
-		else if (voidDeath && cause == EntityDamageEvent.DamageCause.VOID) {
-			player.setFallDistance(0.0F);
-
-			Location location = ((LobbySpawn) getPlugin().getModuleManager().getModule(ModuleType.LOBBY)).getLocation();
-			if (location == null) return;
-
-			Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> player.teleport(location), 3L);
-			event.setCancelled(true);
+		switch(cause){
+			case FALL:
+				if (fallDamage) event.setCancelled(true);
+				break;
+			case DROWNING:
+				if (playerDrowning) event.setCancelled(true);
+				break;
+			case FIRE:
+			case FIRE_TICK:
+				if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
+			case LAVA:
+				if (fireDamage) event.setCancelled(true);
+				break;
+			case VOID: {
+				if (voidDeath) {
+					player.setFallDistance(0.0F);
+					Location location = ((LobbySpawn) getPlugin().getModuleManager().getModule(ModuleType.LOBBY)).getLocation();
+					if (location == null) return;
+					Bukkit.getScheduler().scheduleSyncDelayedTask(getPlugin(), () -> player.teleport(location), 3L);
+					event.setCancelled(true);
+				}
+				break;
+			}
 		}
 	}
 
@@ -393,9 +405,34 @@ public class WorldProtect extends Module {
 
 		if (!(event.getEntity() instanceof Player)) return;
 
-		Player player = (Player) event.getEntity();
+		Player victim = (Player) event.getEntity();
 
-		if (inDisabledWorld(player.getLocation())) return;
+		if (inDisabledWorld(victim.getLocation())) return;
+
+		if(event.getDamager() instanceof Player) {
+			Player attacker = (Player) event.getDamager();
+			PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+			if(pvpMode.isPlayerInPvPMode(attacker.getUniqueId())){
+				if(!pvpMode.isPlayerInPvPMode(victim.getUniqueId())){
+					if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
+						Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
+					}
+					event.setCancelled(true);
+				}
+				return;
+			}
+
+			if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+		}
+
+		if(event.getDamager() instanceof Projectile) {
+			Projectile projectile = (Projectile) event.getDamager();
+			if(projectile.getShooter() instanceof Player) {
+				Player attacker = (Player) projectile.getShooter();
+				PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+			}
+		}
 
 		if (event.getDamager().hasPermission(Permissions.EVENT_PLAYER_PVP.getPermission())) return;
 
@@ -425,7 +462,6 @@ public class WorldProtect extends Module {
 			Block clickedBlock = event.getClickedBlock();
 			if (clickedBlock != null && clickedBlock.getType() == Material.CHISELED_BOOKSHELF) {
 				event.setCancelled(true);
-
 
 				if (tryCooldown(event.getPlayer().getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
 					Messages.EVENT_BLOCK_INTERACT.send(event.getPlayer());

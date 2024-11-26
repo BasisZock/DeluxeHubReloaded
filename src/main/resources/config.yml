@@ -421,20 +421,20 @@ pvp_mode:
     material: DIAMOND_SWORD
     amount: 1
     pvp_on:
-      display_name: '&cPvP Mode &8&l> &aEnabled &7(Right-Click)'
+      display_name: '&cPvP Mode &8&l> &aEnabled'
       lore:
         - '&7Hold for 5 seconds to &cdisable&7 PvP mode!'
     pvp_off:
-      display_name: '&cPvP Mode &8&l> &cDisabled &7(Right-Click)'
+      display_name: '&cPvP Mode &8&l> &cDisabled'
       lore:
         - '&7Hold for 5 seconds to &aenable&7 PvP mode!'
-  pvp_items:
+  items:
     sword:
       material: DIAMOND_SWORD
       amount: 1
       enchantments:
-        - DAMAGE_ALL: 1
-        - DURABILITY: 3
+        - SHARPNESS: 1
+        - UNBREAKING: 3
         - FIRE_ASPECT: 1
     helmet:
       material: DIAMOND_HELMET
@@ -448,4 +448,41 @@ pvp_mode:
     boots:
       material: DIAMOND_BOOTS
       amount: 1
+    other:
+      - material: GOLDEN_APPLE
+        amount: 16
+      - material: BOW
+        amount: 1
+        enchantments:
+          - INFINITY: 1
+          - UNBREAKING: 3
+      - material: ARROW
+        amount: 1
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | TELEPORTATION BOW                        |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+teleportation_bow:
+  enabled: true
+  # Slot the item should be given to?
+  slot: 6
+  arrow_slot: 35
+  # Should we prevent them from moving/dropping the item?
+  disable_inventory_movement: true
+  # Entity to spawn when the bow is used
+  # Available entities: ARROW, ENDER_PEARL, SNOWBALL, EGG, LLAMA_SPIT, SHULKER_BULLET, SPECTRAL_ARROW, TRIDENT
+  entity: ARROW
+  # Cooldown in seconds between each use
+  cooldown: 60
+  max_range: 100
+  item:
+    display_name: '&dTeleportation Bow'
+    glow: true
+    lore:
+      - '&7Right-click to teleport to where the arrow lands!'
+      - '&7Cooldown: &d60s'
+      - '&7Range: &d100 blocks'
+  arrow:
+    display_name: '&dTeleportation Arrow'
+    lore:
+      - '&dWhat a beautiful arrow!'

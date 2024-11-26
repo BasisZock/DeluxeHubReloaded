@@ -87,3 +87,11 @@ Messages:
   PVP_MODE:
     NO_EMPTY_SLOT_FOUND: "%prefix% &cNo empty slot found for PvP Switcher."
     NO_SWITCHER_SECTION: "%prefix% &cNo PvP Switcher section found in the config."
+    SWITCH_ON_TIME: "&7PvP will be &aenabled&7 in &b%time% &7seconds."
+    SWITCH_OFF_TIME: "&7PvP will be &cdisabled&7 in &b%time% &7seconds."
+    LETS_FIGHT: "&7PvP is now &aenabled&7. &7Let's fight!"
+    VICTIM_NOT_IN_PVP_MODE: "%prefix% &c%victim% is not in PvP mode."
+
+  TELEPORTATION_BOW:
+    IN_COOLDOWN: "%prefix% &cYou must wait &e%time% seconds &cbefore using this again."
+    MAX_DISTANCE_REACHED: "%prefix% &cMax distance reached. You can't teleport further."

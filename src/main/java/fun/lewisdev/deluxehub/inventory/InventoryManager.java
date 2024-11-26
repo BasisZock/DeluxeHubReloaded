@@ -29,8 +29,6 @@ public class InventoryManager {
 
 		inventories.values().forEach(AbstractInventory::onEnable);
 
-		NamespacedKey cguiKey = new NamespacedKey(plugin, "dhub.cgui.playerhead");
-
 		plugin.getServer().getPluginManager().registerEvents(new InventoryListener(), plugin);
 	}
 

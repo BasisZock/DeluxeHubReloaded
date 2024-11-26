@@ -15,6 +15,7 @@ import fun.lewisdev.deluxehub.module.ModuleManager;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.hologram.HologramManager;
 import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarManager;
+import fun.lewisdev.deluxehub.utility.NamespacedKeys;
 import fun.lewisdev.deluxehub.utility.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.Bukkit;
@@ -70,6 +71,8 @@ public class DeluxeHubPlugin extends JavaPlugin {
 
 		// Enable bStats metrics
 		new MetricsLite(this, BSTATS_ID);
+
+		NamespacedKeys.registerKeys();
 
 		// Check plugin hooks
 		hooksManager = new HooksManager(this);
