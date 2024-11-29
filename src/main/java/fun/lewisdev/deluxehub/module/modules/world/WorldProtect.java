@@ -158,12 +158,12 @@ public class WorldProtect extends Module {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 		if (!blockBreak || event.isCancelled()) return;
 
-		Player player = event.getPlayer();
 		if (inDisabledWorld(player.getLocation())) return;
 		if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
-		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
 		event.setCancelled(true);
 
@@ -174,13 +174,13 @@ public class WorldProtect extends Module {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPlace(BlockPlaceEvent event) {
+		Player player = event.getPlayer();
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 		if (!blockPlace || event.isCancelled()) return;
 
-		Player player = event.getPlayer();
 		if (inDisabledWorld(player.getLocation())) return;
 		ItemStack item = event.getItemInHand();
 		if (item.getType() == Material.AIR) return;
-		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
 		if (new NBTItem(event.getItemInHand()).hasKey("hotbarItem")) {
 			event.setCancelled(true);
@@ -206,14 +206,14 @@ public class WorldProtect extends Module {
 	// Prevent destroying of item frame/paintings
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDestroy(HangingBreakByEntityEvent event) {
-		if (!blockBreak || inDisabledWorld(event.getEntity().getLocation())) return;
 		Entity entity = event.getEntity();
 		Entity player = event.getRemover();
+
+		if (!blockBreak || inDisabledWorld(event.getEntity().getLocation()) || !BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
 		if (entity instanceof Painting || entity instanceof ItemFrame && player instanceof Player) {
 			if (player != null) {
 				if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
-				if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 				event.setCancelled(true);
 				if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
 					Messages.EVENT_BLOCK_BREAK.send(player);

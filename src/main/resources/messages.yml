@@ -83,6 +83,8 @@ Messages:
     DISABLED: "%prefix% &7Build mode has been &c&ldisabled&7."
     TARGET_NOT_FOUND: "%prefix% &cTarget \"%target%\" not found."
     ENABLED_FOR_TARGET: "%prefix% &7Build mode has been &a&lenabled&7 for target &b&l%target%&7."
+    IN_PVP_MODE: "%prefix% &cYou can't use this command while in PvP mode."
+    TARGET_IN_PVP_MODE: "%prefix% &cYou can't enable build mode for %target% while they are in PvP mode."
 
   PVP_MODE:
     NO_EMPTY_SLOT_FOUND: "%prefix% &cNo empty slot found for PvP Switcher."

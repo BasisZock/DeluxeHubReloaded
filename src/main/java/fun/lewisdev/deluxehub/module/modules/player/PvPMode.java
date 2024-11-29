@@ -322,7 +322,7 @@ public class PvPMode extends Module {
 		_tasks.remove(pUUID);
 	}
 
-	private void giveSwitcher(Player player){
+	public void giveSwitcher(Player player){
 		Inventory inv = player.getInventory();
 		boolean found = false;
 		int slot = -1;

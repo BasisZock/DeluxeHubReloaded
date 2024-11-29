@@ -5,6 +5,8 @@ import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.config.Messages;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarManager;
+import fun.lewisdev.deluxehub.module.modules.player.PvPMode;
+import fun.lewisdev.deluxehub.module.modules.player.TeleportationBow;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.GameMode;
@@ -91,6 +93,8 @@ public class BuildMode implements Listener {
 		if (player.isOnline()) {
 			player.setGameMode(GameMode.SURVIVAL);
 			((HotbarManager) _plugin.getModuleManager().getModule(ModuleType.HOTBAR_ITEMS)).giveItems(player);
+			((TeleportationBow) _plugin.getModuleManager().getModule(ModuleType.TELEPORTATION_BOW)).giveItem(player);
+			((PvPMode) _plugin.getModuleManager().getModule(ModuleType.PVP_MODE)).giveSwitcher(player);
 		}
 	}
 
