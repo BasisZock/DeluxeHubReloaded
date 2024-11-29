@@ -1,16 +1,12 @@
 package fun.lewisdev.deluxehub.utility.universal;
 
-import com.google.common.base.Enums;
 import com.google.common.base.Strings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Instrument;
-import org.bukkit.Location;
-import org.bukkit.Note;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -1074,11 +1070,11 @@ public enum XSound {
 
 		// Since Sound class doesn't have a getSound() method we'll use Guava so
 		// it can cache it for us.
-		sound = Enums.getIfPresent(Sound.class, this.name());
+		sound = com.google.common.base.Optional.fromNullable(Registry.SOUNDS.get(NamespacedKey.minecraft(this.name().toLowerCase())));
 
 		if (!sound.isPresent()) {
 			for (String legacy : this.legacy) {
-				sound = Enums.getIfPresent(Sound.class, legacy);
+				sound = com.google.common.base.Optional.fromNullable(Registry.SOUNDS.get(NamespacedKey.minecraft(legacy.toLowerCase())));
 				if (sound.isPresent()) break;
 			}
 		}

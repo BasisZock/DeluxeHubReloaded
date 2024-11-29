@@ -5,8 +5,9 @@ import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.utility.TextUtil;
-import fun.lewisdev.deluxehub.utility.universal.XSound;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -43,7 +44,12 @@ public class AutoBroadcast extends Module implements Runnable {
 		}
 
 		if (config.getBoolean("announcements.sound.enabled")) {
-			sound = XSound.matchXSound(config.getString("announcements.sound.value")).get().parseSound();
+			try {
+				sound = Registry.SOUNDS.get(NamespacedKey.minecraft(config.getString("announcements.sound.value")));
+			}catch(Exception ex){
+				Bukkit.getLogger().warning("[DeluxeHub] Invalid sound name: " + config.getString("announcements.sound.value")+". Defaulting to block.note_block.plink.");
+				sound = Sound.BLOCK_NOTE_BLOCK_PLING;
+			}
 			volume = config.getDouble("announcements.sound.volume");
 			pitch = config.getDouble("announcements.sound.pitch");
 		}

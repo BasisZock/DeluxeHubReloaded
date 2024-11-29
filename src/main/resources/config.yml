@@ -163,7 +163,7 @@ announcements:
 
   sound:
     enabled: true
-    value: BLOCK_NOTE_BLOCK_PLING
+    value: block.note_block.plink
     volume: 1.0
     pitch: 1.0
 
@@ -203,7 +203,7 @@ launchpad:
 
   # Actions executed upon use of a launchpad
   actions:
-    - '[SOUND] ENTITY_BAT_TAKEOFF'
+    - '[SOUND] entity.bat.takeoff'
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # | DOUBLE JUMP                              |
@@ -222,8 +222,7 @@ double_jump:
 
   # Actions executed upon use of double jump
   actions:
-    - '[SOUND] ENTITY_BAT_TAKEOFF'
-
+    - '[SOUND] entity.bat.takeoff'
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # | CHAT MANAGEMENT                          |
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -313,7 +312,7 @@ join_events:
   - "[MESSAGE] &r            &7&oPowered By DeluxeHubReloaded"
   - "[MESSAGE] &8&m+---------------***---------------+"
   - "[TITLE] &b&lWELCOME;&f%player%;1;2;1"
-  - "[SOUND] ENTITY_PLAYER_LEVELUP"
+  - "[SOUND] entity.player.levelup"
   - "[GAMEMODE] survival"
   - "[EFFECT] SPEED;1"
 
