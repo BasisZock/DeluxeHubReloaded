@@ -302,7 +302,8 @@ public class WorldProtect extends Module {
 				break;
 			case FIRE:
 			case FIRE_TICK:
-				if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
+				if(pvpMode != null)
+					if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
 			case LAVA:
 				if (fireDamage) event.setCancelled(true);
 				break;
@@ -409,28 +410,32 @@ public class WorldProtect extends Module {
 
 		if (inDisabledWorld(victim.getLocation())) return;
 
-		if(event.getDamager() instanceof Player) {
-			Player attacker = (Player) event.getDamager();
-			PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
-			if(pvpMode.isPlayerInPvPMode(attacker.getUniqueId())){
-				if(!pvpMode.isPlayerInPvPMode(victim.getUniqueId())){
-					if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
-						Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
+		PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+		if(pvpMode != null) {
+			if (event.getDamager() instanceof Player) {
+				Player attacker = (Player) event.getDamager();
+
+				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId())) {
+					if (!pvpMode.isPlayerInPvPMode(victim.getUniqueId())) {
+						if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
+							Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
+						}
+						event.setCancelled(true);
 					}
-					event.setCancelled(true);
+					return;
 				}
-				return;
+
+				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId()))
+					return;
 			}
 
-			if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
-		}
-
-		if(event.getDamager() instanceof Projectile) {
-			Projectile projectile = (Projectile) event.getDamager();
-			if(projectile.getShooter() instanceof Player) {
-				Player attacker = (Player) projectile.getShooter();
-				PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
-				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+			if (event.getDamager() instanceof Projectile) {
+				Projectile projectile = (Projectile) event.getDamager();
+				if (projectile.getShooter() instanceof Player) {
+					Player attacker = (Player) projectile.getShooter();
+					if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId()))
+						return;
+				}
 			}
 		}
 
