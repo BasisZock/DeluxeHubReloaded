@@ -1,6 +1,5 @@
 package fun.lewisdev.deluxehub.module.modules.world;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.Permissions;
 import fun.lewisdev.deluxehub.base.BuildMode;
@@ -15,6 +14,7 @@ import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -26,6 +26,8 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -158,12 +160,12 @@ public class WorldProtect extends Module {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
-		Player player = event.getPlayer();
-		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 		if (!blockBreak || event.isCancelled()) return;
 
+		Player player = event.getPlayer();
 		if (inDisabledWorld(player.getLocation())) return;
 		if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
 		event.setCancelled(true);
 
@@ -174,17 +176,21 @@ public class WorldProtect extends Module {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockPlace(BlockPlaceEvent event) {
-		Player player = event.getPlayer();
-		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 		if (!blockPlace || event.isCancelled()) return;
 
+		Player player = event.getPlayer();
 		if (inDisabledWorld(player.getLocation())) return;
 		ItemStack item = event.getItemInHand();
 		if (item.getType() == Material.AIR) return;
+		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
-		if (new NBTItem(event.getItemInHand()).hasKey("hotbarItem")) {
-			event.setCancelled(true);
-			return;
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null) {
+			String hotbarItem = meta.getPersistentDataContainer().get(new NamespacedKey(getPlugin(), "hotbarItem"), PersistentDataType.STRING);
+			if (hotbarItem != null) {
+				event.setCancelled(true);
+				return;
+			}
 		}
 
 		if (player.hasPermission(Permissions.EVENT_BLOCK_PLACE.getPermission())) return;
@@ -206,14 +212,14 @@ public class WorldProtect extends Module {
 	// Prevent destroying of item frame/paintings
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDestroy(HangingBreakByEntityEvent event) {
+		if (!blockBreak || inDisabledWorld(event.getEntity().getLocation())) return;
 		Entity entity = event.getEntity();
 		Entity player = event.getRemover();
-
-		if (!blockBreak || inDisabledWorld(event.getEntity().getLocation()) || !BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 
 		if (entity instanceof Painting || entity instanceof ItemFrame && player instanceof Player) {
 			if (player != null) {
 				if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
+				if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 				event.setCancelled(true);
 				if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
 					Messages.EVENT_BLOCK_BREAK.send(player);
@@ -302,8 +308,7 @@ public class WorldProtect extends Module {
 				break;
 			case FIRE:
 			case FIRE_TICK:
-				if(pvpMode != null)
-					if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
+				if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
 			case LAVA:
 				if (fireDamage) event.setCancelled(true);
 				break;
@@ -410,32 +415,28 @@ public class WorldProtect extends Module {
 
 		if (inDisabledWorld(victim.getLocation())) return;
 
-		PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
-		if(pvpMode != null) {
-			if (event.getDamager() instanceof Player) {
-				Player attacker = (Player) event.getDamager();
-
-				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId())) {
-					if (!pvpMode.isPlayerInPvPMode(victim.getUniqueId())) {
-						if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
-							Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
-						}
-						event.setCancelled(true);
+		if(event.getDamager() instanceof Player) {
+			Player attacker = (Player) event.getDamager();
+			PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+			if(pvpMode.isPlayerInPvPMode(attacker.getUniqueId())){
+				if(!pvpMode.isPlayerInPvPMode(victim.getUniqueId())){
+					if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
+						Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
 					}
-					return;
+					event.setCancelled(true);
 				}
-
-				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId()))
-					return;
+				return;
 			}
 
-			if (event.getDamager() instanceof Projectile) {
-				Projectile projectile = (Projectile) event.getDamager();
-				if (projectile.getShooter() instanceof Player) {
-					Player attacker = (Player) projectile.getShooter();
-					if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId()))
-						return;
-				}
+			if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+		}
+
+		if(event.getDamager() instanceof Projectile) {
+			Projectile projectile = (Projectile) event.getDamager();
+			if(projectile.getShooter() instanceof Player) {
+				Player attacker = (Player) projectile.getShooter();
+				PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
 			}
 		}
 

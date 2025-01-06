@@ -1,7 +1,6 @@
 package fun.lewisdev.deluxehub;
 
 import cl.bgmp.minecraft.util.commands.exceptions.*;
-import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import fun.lewisdev.deluxehub.action.ActionManager;
 import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.command.CommandManager;
@@ -14,7 +13,6 @@ import fun.lewisdev.deluxehub.inventory.InventoryManager;
 import fun.lewisdev.deluxehub.module.ModuleManager;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.hologram.HologramManager;
-import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarManager;
 import fun.lewisdev.deluxehub.utility.NamespacedKeys;
 import fun.lewisdev.deluxehub.utility.UpdateChecker;
 import org.bstats.bukkit.MetricsLite;
@@ -45,14 +43,28 @@ public class DeluxeHubPlugin extends JavaPlugin {
 		getLogger().log(Level.INFO, " ··························································································");
 		getLogger().log(Level.INFO, " : ____       _                _   _       _     ____      _                 _          _ :");
 		getLogger().log(Level.INFO, " :|  _ \\  ___| |_   ___  _____| | | |_   _| |__ |  _ \\ ___| | ___   __ _  __| | ___  __| |:");
-		getLogger().log(Level.INFO, " :| | | |/ _ \\ | | | \\ \\/ / _ \\ |_| | | | | '_ \\| |_) / _ \\ |/ _ \\ / _` |/ _` |/ _ \\/ _` |:");
+		getLogger().log(Level.INFO, " :| | | |/ _ \\ | | | \\ \\/ / _ \\ |_| | | | | '_ \\| |_) / _ \\ |/ _ \\ / _ |/ _ |/ _ \\/ _ |:");
 		getLogger().log(Level.INFO, " :| |_| |  __/ | |_| |>  <  __/  _  | |_| | |_) |  _ <  __/ | (_) | (_| | (_| |  __/ (_| |:");
-		getLogger().log(Level.INFO, " :|____/ \\___|_|\\__,_/_/\\_\\___|_| |_|\\__,_|_.__/|_| \\_\\___|_|\\___/ \\__,_|\\__,_|\\___|\\__,_|:");
+		getLogger().log(Level.INFO, " :|____/ \\___|_|\\__,_/_/\\_\\___|_| |_|\\__,_|_.__/|_| \\_\\___|_|\\___/ \\__,_|\\__,_|\\__,_|\\___|\\__,_|:");
 		getLogger().log(Level.INFO, " ··························································································");
 		getLogger().log(Level.INFO, "");
 		getLogger().log(Level.INFO, "Version: " + getDescription().getVersion());
 		getLogger().log(Level.INFO, "Author: Strafbefehl and ItsLewizzz (Old Developer)");
 		getLogger().log(Level.INFO, "");
+
+		// Check server version
+		if (Bukkit.getVersion().contains("1.13") || Bukkit.getVersion().contains("1.14") ||
+				Bukkit.getVersion().contains("1.15") || Bukkit.getVersion().contains("1.16") ||
+				Bukkit.getVersion().contains("1.17") || Bukkit.getVersion().contains("1.18") ||
+				Bukkit.getVersion().contains("1.19") || Bukkit.getVersion().contains("1.20")) {
+			getLogger().severe("============= UNSUPPORTED SERVER VERSION =============");
+			getLogger().severe("DeluxeHubReloaded requires at least Spigot 1.21 to run.");
+			getLogger().severe("Please update your server to a newer version.");
+			getLogger().severe("The plugin will now disable.");
+			getLogger().severe("============= UNSUPPORTED SERVER VERSION =============");
+			getPluginLoader().disablePlugin(this);
+			return;
+		}
 
 		// Check if using Spigot
 		try {
@@ -66,8 +78,6 @@ public class DeluxeHubPlugin extends JavaPlugin {
 			getPluginLoader().disablePlugin(this);
 			return;
 		}
-
-		MinecraftVersion.disableUpdateCheck();
 
 		// Enable bStats metrics
 		new MetricsLite(this, BSTATS_ID);

@@ -1,6 +1,5 @@
 package fun.lewisdev.deluxehub.module.modules.hotbar.items;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.config.Messages;
 import fun.lewisdev.deluxehub.cooldown.CooldownType;
@@ -8,6 +7,7 @@ import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarItem;
 import fun.lewisdev.deluxehub.module.modules.hotbar.HotbarManager;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +34,15 @@ public class PlayerHider extends HotbarItem {
 		super(hotbarManager, item, slot, key);
 		hidden = new ArrayList<>();
 		FileConfiguration config = getHotbarManager().getConfig(ConfigType.SETTINGS);
-		NBTItem nbtItem = new NBTItem(ItemStackBuilder.getItemStack(config.getConfigurationSection("player_hider.hidden")).build());
-		nbtItem.setString("hotbarItem", key);
-		hiddenItem = nbtItem.getItem();
+		ItemStackBuilder builder = ItemStackBuilder.getItemStack(config.getConfigurationSection("player_hider.hidden"));
+		ItemMeta meta = builder.build().getItemMeta();
+		if (meta != null) {
+			meta.getPersistentDataContainer().set(new NamespacedKey(getPlugin(), "hotbarItem"), PersistentDataType.STRING, key);
+			hiddenItem = builder.build();
+			hiddenItem.setItemMeta(meta);
+		} else {
+			hiddenItem = null;
+		}
 		cooldown = config.getInt("player_hider.cooldown");
 	}
 
