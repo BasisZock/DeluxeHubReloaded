@@ -49,7 +49,7 @@ public class DeluxeHubPlugin extends JavaPlugin {
 		getLogger().log(Level.INFO, " ··························································································");
 		getLogger().log(Level.INFO, "");
 		getLogger().log(Level.INFO, "Version: " + getDescription().getVersion());
-		getLogger().log(Level.INFO, "Author: Strafbefehl and ItsLewizzz (Old Developer)");
+		getLogger().log(Level.INFO, "Author: Strafbefehl and ItsLewizzz");
 		getLogger().log(Level.INFO, "");
 
 		// Check server version
