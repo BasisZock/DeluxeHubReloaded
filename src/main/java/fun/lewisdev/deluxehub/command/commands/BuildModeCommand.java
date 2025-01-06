@@ -6,15 +6,20 @@ import cl.bgmp.minecraft.util.commands.exceptions.CommandException;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.Permissions;
 import fun.lewisdev.deluxehub.base.BuildMode;
+import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.config.Messages;
 import fun.lewisdev.deluxehub.module.ModuleType;
 import fun.lewisdev.deluxehub.module.modules.player.PvPMode;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import fun.lewisdev.deluxehub.module.Module;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class BuildModeCommand {
 	private final DeluxeHubPlugin plugin;
+	private static final DeluxeHubPlugin PLUGIN = JavaPlugin.getPlugin(DeluxeHubPlugin.class);
 
 	public BuildModeCommand(DeluxeHubPlugin plugin) {
 		this.plugin = plugin;
@@ -25,6 +30,7 @@ public class BuildModeCommand {
 			desc = "Toggle build mode."
 	)
 	public void buildMode(final CommandContext args, final CommandSender sender) throws CommandException {
+		FileConfiguration config = PLUGIN.getConfigManager().getFile(ConfigType.SETTINGS).getConfig();
 		final BuildMode bm = BuildMode.getInstance();
 		Player target;
 		if(args.argsLength() >= 1){
@@ -37,17 +43,28 @@ public class BuildModeCommand {
 				Messages.BUILD_MODE_COMMAND_TARGET_NOT_FOUND.send(sender, "%target%", args.getString(0));
 				return;
 			}
-			if(((PvPMode) plugin.getModuleManager().getModule(ModuleType.PVP_MODE)).isPlayerInPvPMode(target.getUniqueId())){
-				Messages.BUILD_MODE_COMMAND_TARGET_IN_PVP_MODE.send(sender, "%target%", target.getDisplayName());
-				return;
+
+			if (config.getBoolean("pvp_mode.enabled")) {
+				PvPMode pvpMode = (PvPMode) plugin.getModuleManager().getModule(ModuleType.PVP_MODE);
+				if (pvpMode.isPlayerInPvPMode(target.getUniqueId())) {
+					Messages.BUILD_MODE_COMMAND_TARGET_IN_PVP_MODE.send(sender, "%target%", target.getDisplayName());
+					return;
+				}
 			}
+
+
+
 		}else{
 			if (!(sender instanceof Player)) throw new CommandException("Console cannot use build mode");
 			target = (Player) sender;
-			if(((PvPMode) plugin.getModuleManager().getModule(ModuleType.PVP_MODE)).isPlayerInPvPMode(target.getUniqueId())){
-				Messages.BUILD_MODE_COMMAND_IN_PVP_MODE.send(sender);
-				return;
+
+			if (config.getBoolean("pvp_mode.enabled")) {
+				if(((PvPMode) plugin.getModuleManager().getModule(ModuleType.PVP_MODE)).isPlayerInPvPMode(target.getUniqueId())){
+					Messages.BUILD_MODE_COMMAND_IN_PVP_MODE.send(sender);
+					return;
+				}
 			}
+
 			if (!(sender.hasPermission(Permissions.COMMAND_BUILD_MODE.getPermission())) || !(sender.hasPermission(Permissions.COMMAND_BUILD_MODE_OTHERS.getPermission()))) {
 				if(BuildMode.getInstance().isPresent(((Player) sender).getUniqueId())){
 					remove(bm, target);

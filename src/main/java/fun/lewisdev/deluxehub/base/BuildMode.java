@@ -16,17 +16,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class BuildMode implements Listener {
 	private static BuildMode _instance;
 	private final DeluxeHubPlugin _plugin;
 	private final ArrayList<UUID> _players = new ArrayList<>();
+	private final HashMap<UUID, ItemStack[]> _inventories = new HashMap<>();
 	private final List<String> _worlds;
 	private boolean _actionbar_enabled = true;
 	private boolean _invertedWorlds = false;
@@ -80,6 +79,7 @@ public class BuildMode implements Listener {
 
 	public void addPlayer(Player player) {
 		_players.add(player.getUniqueId());
+		_inventories.put(player.getUniqueId(), player.getInventory().getContents()); // Save inventory
 		player.getInventory().clear();
 		player.setGameMode(GameMode.CREATIVE);
 		player.getInventory().setHeldItemSlot(0);
@@ -88,13 +88,12 @@ public class BuildMode implements Listener {
 	public void removePlayer(UUID uuid) {
 		Player player = _plugin.getServer().getPlayer(uuid);
 		if (player == null) return;
-		player.getInventory().clear();
 		_players.remove(uuid);
-		if (player.isOnline()) {
-			player.setGameMode(GameMode.SURVIVAL);
-			((HotbarManager) _plugin.getModuleManager().getModule(ModuleType.HOTBAR_ITEMS)).giveItems(player);
-			((TeleportationBow) _plugin.getModuleManager().getModule(ModuleType.TELEPORTATION_BOW)).giveItem(player);
-			((PvPMode) _plugin.getModuleManager().getModule(ModuleType.PVP_MODE)).giveSwitcher(player);
+		player.getInventory().clear();
+		player.setGameMode(GameMode.SURVIVAL);
+		if (_inventories.containsKey(uuid)) {
+			player.getInventory().setContents(_inventories.get(uuid)); // Restore inventory
+			_inventories.remove(uuid);
 		}
 	}
 
@@ -106,3 +105,4 @@ public class BuildMode implements Listener {
 		return _invertedWorlds == _worlds.contains(world);
 	}
 }
+
