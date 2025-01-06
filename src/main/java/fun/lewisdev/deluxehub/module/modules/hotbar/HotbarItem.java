@@ -1,12 +1,12 @@
 package fun.lewisdev.deluxehub.module.modules.hotbar;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +18,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
 
@@ -36,9 +38,12 @@ public abstract class HotbarItem implements Listener {
 		this.key = key;
 		this.slot = slot;
 
-		NBTItem nbtItem = new NBTItem(item);
-		nbtItem.setString("hotbarItem", key);
-		this.item = nbtItem.getItem();
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null) {
+			meta.getPersistentDataContainer().set(new NamespacedKey(getPlugin(), "hotbarItem"), PersistentDataType.STRING, key);
+			item.setItemMeta(meta);
+		}
+		this.item = item;
 	}
 
 	public DeluxeHubPlugin getPlugin() {
@@ -97,9 +102,14 @@ public abstract class HotbarItem implements Listener {
 	public void removeItem(Player player) {
 		PlayerInventory inventory = player.getInventory();
 		ItemStack item = inventory.getItem(slot);
+		if (item == null) return;
 
-		if (item != null && new NBTItem(item).getString("hotbarItem").equals(key)) {
-			inventory.remove(Objects.requireNonNull(inventory.getItem(slot)));
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null) {
+			String hotbarItem = meta.getPersistentDataContainer().get(new NamespacedKey(getPlugin(), "hotbarItem"), PersistentDataType.STRING);
+			if (hotbarItem != null && hotbarItem.equals(key)) {
+				inventory.remove(Objects.requireNonNull(inventory.getItem(slot)));
+			}
 		}
 	}
 
@@ -114,8 +124,12 @@ public abstract class HotbarItem implements Listener {
 		ItemStack clicked = event.getCurrentItem();
 		if (clicked == null || clicked.getType() == Material.AIR) return;
 
-		if (event.getSlot() == slot && new NBTItem(clicked).getString("hotbarItem").equals(key))
-			event.setCancelled(true);
+		ItemMeta meta = clicked.getItemMeta();
+		if (meta != null) {
+			String hotbarItem = meta.getPersistentDataContainer().get(new NamespacedKey(getPlugin(), "hotbarItem"), PersistentDataType.STRING);
+			if (hotbarItem != null && event.getSlot() == slot && hotbarItem.equals(key))
+				event.setCancelled(true);
+		}
 	}
 
 	@EventHandler
@@ -125,12 +139,16 @@ public abstract class HotbarItem implements Listener {
 
 		Player player = event.getPlayer();
 		ItemStack item = player.getItemInHand();
+		if (item.getType() == Material.AIR) return;
 
-		if (getHotbarManager().inDisabledWorld(player.getLocation())) return;
-		else if (item.getType() == Material.AIR) return;
-		else if (!new NBTItem(item).getString("hotbarItem").equals(key)) return;
-
-		onInteract(player);
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null) {
+			String hotbarItem = meta.getPersistentDataContainer().get(new NamespacedKey(getPlugin(), "hotbarItem"), PersistentDataType.STRING);
+			if (hotbarItem != null && getHotbarManager().inDisabledWorld(player.getLocation()) && hotbarItem.equals(key)) return;
+			else if (hotbarItem != null && hotbarItem.equals(key)) {
+				onInteract(player);
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -162,6 +180,7 @@ public abstract class HotbarItem implements Listener {
 		Player player = event.getPlayer();
 		if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
 		if (!getHotbarManager().inDisabledWorld(player.getLocation())) giveItem(player);
+		player.setAllowFlight(true);
 	}
 
 }
