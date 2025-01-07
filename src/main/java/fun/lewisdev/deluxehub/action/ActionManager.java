@@ -32,6 +32,7 @@ public class ActionManager {
 				new PotionEffectAction(),
 				new GamemodeAction(),
 				new BungeeAction(),
+				new ProxyAction(),
 				new CloseInventoryAction(),
 				new ActionbarAction(),
 				new TitleAction(),
