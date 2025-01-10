@@ -220,7 +220,9 @@ public class PvPMode extends Module {
 							_players.remove(pUUID);
 							inv.clear();
 							hotbarManager.giveItems(player);
-							tpBow.giveItem(player);
+							if (tpBow != null) {
+								tpBow.giveItem(player);
+							}
 							inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
 							hotbarManager.changeToJoinSlot(player);
 							getPlugin().getServer().getScheduler().cancelTask(_tasks.get(pUUID));

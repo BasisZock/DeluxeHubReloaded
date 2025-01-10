@@ -97,7 +97,12 @@ public class WorldProtect extends Module {
 			XMaterial.WAXED_WEATHERED_COPPER_TRAPDOOR.parseMaterial(),
 			XMaterial.WEATHERED_COPPER_TRAPDOOR.parseMaterial(),
 			XMaterial.OAK_BUTTON.parseMaterial(),
-			XMaterial.OAK_DOOR.parseMaterial());
+			XMaterial.OAK_DOOR.parseMaterial(),
+                        XMaterial.PALE_OAK_BUTTON.parseMaterial(),
+			XMaterial.PALE_OAK_DOOR.parseMaterial(),
+			XMaterial.PALE_OAK_TRAPDOOR.parseMaterial(),
+			XMaterial.PALE_OAK_FENCE_GATE.parseMaterial(),
+			XMaterial.PALE_OAK_DOOR.parseMaterial());
 	private boolean hungerLoss;
 	private boolean fallDamage;
 	private boolean weatherChange;

@@ -163,7 +163,7 @@ announcements:
 
   sound:
     enabled: true
-    value: block.note_block.plink
+    value: block.note_block.pling
     volume: 1.0
     pitch: 1.0
 

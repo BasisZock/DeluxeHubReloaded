@@ -47,7 +47,7 @@ public class AutoBroadcast extends Module implements Runnable {
 			try {
 				sound = Registry.SOUNDS.get(NamespacedKey.minecraft(config.getString("announcements.sound.value")));
 			}catch(Exception ex){
-				Bukkit.getLogger().warning("[DeluxeHub] Invalid sound name: " + config.getString("announcements.sound.value")+". Defaulting to block.note_block.plink.");
+				Bukkit.getLogger().warning("[DeluxeHub] Invalid sound name: " + config.getString("announcements.sound.value")+". Defaulting to block.note_block.pling.");
 				sound = Sound.BLOCK_NOTE_BLOCK_PLING;
 			}
 			volume = config.getDouble("announcements.sound.volume");
