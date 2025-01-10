@@ -58,7 +58,7 @@
                                     <include>org.bstats:bstats-bukkit-lite</include>
                                     <include>com.github.BGMP.CommandFramework:command-framework-bukkit</include>
                                     <include>javax.inject:javax.inject</include>
-                                    <include>de.tr7zw:item-nbt-api</include>
+                                    <include>co.aikar:acf-paper</include>
                                 </includes>
                             </artifactSet>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -72,8 +72,8 @@
                                     <shadedPattern>fun.lewisdev.deluxehub.libs.command</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                                    <shadedPattern>fun.lewisdev.deluxehub.libs.nbt</shadedPattern>
+                                    <pattern>co.aikar</pattern>
+                                    <shadedPattern>fun.lewisdev.deluxehub.libs.aikar</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -176,6 +176,12 @@
             <groupId>com.github.shynixn.headdatabase</groupId>
             <artifactId>hdb-api</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

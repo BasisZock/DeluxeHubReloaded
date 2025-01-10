@@ -1,6 +1,7 @@
 package fun.lewisdev.deluxehub.module;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
+import fun.lewisdev.deluxehub.command.CustomCommandHandler;
 import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.module.modules.chat.*;
 import fun.lewisdev.deluxehub.module.modules.hologram.HologramManager;
@@ -51,7 +52,7 @@ public class ModuleManager {
 		registerModule(new AntiSwear(plugin), "anti_swear.enabled");
 		registerModule(new ChatCommandBlock(plugin), "command_block.enabled");
 		registerModule(new ChatLock(plugin));
-		registerModule(new CustomCommands(plugin));
+		registerModule(new CustomCommandHandler(plugin));
 		registerModule(new PlayerListener(plugin));
 		registerModule(new HotbarManager(plugin));
 		registerModule(new WorldProtect(plugin));
