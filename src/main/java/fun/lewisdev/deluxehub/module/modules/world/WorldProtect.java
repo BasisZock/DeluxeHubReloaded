@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WorldProtect extends Module {
-
+	FileConfiguration config = getConfig(ConfigType.SETTINGS);
 	private final List<Material> interactables = Arrays.asList(
 			XMaterial.ACACIA_DOOR.parseMaterial(),
 			XMaterial.ACACIA_FENCE_GATE.parseMaterial(),
@@ -98,10 +98,11 @@ public class WorldProtect extends Module {
 			XMaterial.WEATHERED_COPPER_TRAPDOOR.parseMaterial(),
 			XMaterial.OAK_BUTTON.parseMaterial(),
 			XMaterial.OAK_DOOR.parseMaterial(),
-                        XMaterial.PALE_OAK_BUTTON.parseMaterial(),
+			XMaterial.PALE_OAK_BUTTON.parseMaterial(),
 			XMaterial.PALE_OAK_DOOR.parseMaterial(),
 			XMaterial.PALE_OAK_TRAPDOOR.parseMaterial(),
 			XMaterial.PALE_OAK_FENCE_GATE.parseMaterial(),
+			XMaterial.DECORATED_POT.parseMaterial(),
 			XMaterial.PALE_OAK_DOOR.parseMaterial());
 	private boolean hungerLoss;
 	private boolean fallDamage;
@@ -313,7 +314,9 @@ public class WorldProtect extends Module {
 				break;
 			case FIRE:
 			case FIRE_TICK:
-				if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
+				if (config.getBoolean("pvp_mode.enabled")) {
+					if(pvpMode.isPlayerInPvPMode(player.getUniqueId())) return;
+				}
 			case LAVA:
 				if (fireDamage) event.setCancelled(true);
 				break;
@@ -422,26 +425,35 @@ public class WorldProtect extends Module {
 
 		if(event.getDamager() instanceof Player) {
 			Player attacker = (Player) event.getDamager();
-			PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
-			if(pvpMode.isPlayerInPvPMode(attacker.getUniqueId())){
-				if(!pvpMode.isPlayerInPvPMode(victim.getUniqueId())){
-					if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
-						Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
+			if (config.getBoolean("pvp_mode.enabled")) {
+				PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+				if(pvpMode.isPlayerInPvPMode(attacker.getUniqueId())){
+					if(!pvpMode.isPlayerInPvPMode(victim.getUniqueId())){
+						if (tryCooldown(attacker.getUniqueId(), CooldownType.VICTIM_NOT_IN_PVP_MODE, 3)) {
+							Messages.PVP_MODE_VICTIM_NOT_IN_PVP_MODE.send(attacker, "%victim%", victim.getDisplayName());
+						}
+						event.setCancelled(true);
 					}
-					event.setCancelled(true);
+					return;
 				}
-				return;
+				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
 			}
+				event.setCancelled(true);
 
-			if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+
+
+
 		}
 
 		if(event.getDamager() instanceof Projectile) {
 			Projectile projectile = (Projectile) event.getDamager();
 			if(projectile.getShooter() instanceof Player) {
 				Player attacker = (Player) projectile.getShooter();
-				PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
-				if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+				if (config.getBoolean("pvp_mode.enabled")) {
+					PvPMode pvpMode = (PvPMode) getPlugin().getModuleManager().getModule(ModuleType.PVP_MODE);
+					if (pvpMode.isPlayerInPvPMode(attacker.getUniqueId()) && pvpMode.isPlayerInPvPMode(victim.getUniqueId())) return;
+				}
+				event.setCancelled(true);
 			}
 		}
 
@@ -471,7 +483,8 @@ public class WorldProtect extends Module {
 		if (BuildMode.getInstance().isPresent(event.getPlayer().getUniqueId())) return;
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Block clickedBlock = event.getClickedBlock();
-			if (clickedBlock != null && clickedBlock.getType() == Material.CHISELED_BOOKSHELF) {
+			if (clickedBlock != null && (clickedBlock.getType() == Material.CHISELED_BOOKSHELF ||
+					clickedBlock.getType() == Material.DECORATED_POT)) {  // Added decorated pot check
 				event.setCancelled(true);
 
 				if (tryCooldown(event.getPlayer().getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
