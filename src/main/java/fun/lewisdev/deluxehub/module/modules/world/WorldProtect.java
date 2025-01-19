@@ -98,10 +98,11 @@ public class WorldProtect extends Module {
 			XMaterial.WEATHERED_COPPER_TRAPDOOR.parseMaterial(),
 			XMaterial.OAK_BUTTON.parseMaterial(),
 			XMaterial.OAK_DOOR.parseMaterial(),
-                        XMaterial.PALE_OAK_BUTTON.parseMaterial(),
+			XMaterial.PALE_OAK_BUTTON.parseMaterial(),
 			XMaterial.PALE_OAK_DOOR.parseMaterial(),
 			XMaterial.PALE_OAK_TRAPDOOR.parseMaterial(),
 			XMaterial.PALE_OAK_FENCE_GATE.parseMaterial(),
+			XMaterial.DECORATED_POT.parseMaterial(),
 			XMaterial.PALE_OAK_DOOR.parseMaterial());
 	private boolean hungerLoss;
 	private boolean fallDamage;
@@ -482,7 +483,8 @@ public class WorldProtect extends Module {
 		if (BuildMode.getInstance().isPresent(event.getPlayer().getUniqueId())) return;
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Block clickedBlock = event.getClickedBlock();
-			if (clickedBlock != null && clickedBlock.getType() == Material.CHISELED_BOOKSHELF) {
+			if (clickedBlock != null && (clickedBlock.getType() == Material.CHISELED_BOOKSHELF ||
+					clickedBlock.getType() == Material.DECORATED_POT)) {  // Added decorated pot check
 				event.setCancelled(true);
 
 				if (tryCooldown(event.getPlayer().getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
