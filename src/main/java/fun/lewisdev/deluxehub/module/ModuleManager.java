@@ -10,7 +10,6 @@ import fun.lewisdev.deluxehub.module.modules.player.*;
 import fun.lewisdev.deluxehub.module.modules.visual.scoreboard.ScoreboardManager;
 import fun.lewisdev.deluxehub.module.modules.visual.tablist.TablistManager;
 import fun.lewisdev.deluxehub.module.modules.world.*;
-import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -61,9 +60,9 @@ public class ModuleManager {
 		registerModule(new HologramManager(plugin));
 
 		// Requires 1.9+
-		if (XMaterial.supports(9)) {
-			registerModule(new PlayerOffHandSwap(plugin), "world_settings.disable_off_hand_swap");
-		}
+//		if (XMaterial.supports(9)) {
+//			registerModule(new PlayerOffHandSwap(plugin), "world_settings.disable_off_hand_swap");
+//		}
 
 		for (Module module : modules.values()) {
 			try {

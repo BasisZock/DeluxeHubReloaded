@@ -2,8 +2,8 @@ package fun.lewisdev.deluxehub.hook.hooks.head;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.hook.PluginHook;
-import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
@@ -36,7 +36,7 @@ public class BaseHead implements PluginHook, HeadHook {
 		Pattern pattern = Pattern.compile("\"url\"\\s*:\\s*\"([^\"]+)\"");
 		Matcher matcher = pattern.matcher(decodedBase);
 
-		ItemStack head = XMaterial.PLAYER_HEAD.parseItem();
+		ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) head.getItemMeta();
 		if (matcher.find()) {
 			PlayerProfile playerProfile = Bukkit.createPlayerProfile(UUID.randomUUID(), "");

@@ -3,7 +3,6 @@ package fun.lewisdev.deluxehub.module.modules.hotbar;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.base.BuildMode;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
-import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -135,7 +134,7 @@ public abstract class HotbarItem implements Listener {
 	@EventHandler
 	public void hotbarItemInteract(PlayerInteractEvent event) {
 		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-		if (XMaterial.supports(9) && event.getHand() != EquipmentSlot.HAND) return;
+		if (event.getHand() != EquipmentSlot.HAND) return;
 
 		Player player = event.getPlayer();
 		ItemStack item = player.getItemInHand();
