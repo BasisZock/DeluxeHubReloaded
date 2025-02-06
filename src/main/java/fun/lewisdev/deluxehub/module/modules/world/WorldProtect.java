@@ -34,46 +34,20 @@ import java.util.List;
 public class WorldProtect extends Module {
     FileConfiguration config = getConfig(ConfigType.SETTINGS);
     private final List<Material> interactables = Arrays.asList(
-            // Anvils
             Material.ANVIL,
-
-            // Beacon
             Material.BEACON,
-
-            // Brewing Stand
             Material.BREWING_STAND,
-
-            // Command Block
             Material.COMMAND_BLOCK,
-
-            // Daylight Detector
             Material.DAYLIGHT_DETECTOR,
-
-            // Dispenser & Dropper
-            Material.DISPENSER, Material.DROPPER,
-
-            // Enchanting Table
+            Material.DISPENSER,
+            Material.DROPPER,
             Material.ENCHANTING_TABLE,
-
-            // Furnace
             Material.FURNACE,
-
-            // Hopper & Minecarts
             Material.HOPPER, Material.HOPPER_MINECART, Material.MINECART, Material.CHEST_MINECART,
-
-            // Note Block
             Material.NOTE_BLOCK,
-
-            // Comparator
             Material.COMPARATOR,
-
-            // Boat
             Material.OAK_BOAT,
-
-            // Flower Pot & Decorated Pot
             Material.FLOWER_POT, Material.DECORATED_POT,
-
-            // Paintings & Item Frames
             Material.PAINTING, Material.ITEM_FRAME);
 
     private boolean hungerLoss;
