@@ -27,6 +27,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -78,7 +79,10 @@ public class WorldProtect extends Module {
             Material.SPAWNER,
             Material.STONECUTTER,
             Material.STRUCTURE_BLOCK,
-            Material.TRIAL_SPAWNER
+            Material.TRIAL_SPAWNER,
+            Material.BLAST_FURNACE,
+            Material.CHIPPED_ANVIL,
+            Material.DAMAGED_ANVIL
     );
 
     private boolean hungerLoss;
@@ -510,6 +514,24 @@ public class WorldProtect extends Module {
             event.setCancelled(true);
             if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
                 Messages.EVENT_BLOCK_INTERACT.send(player);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onVehicleBreak(VehicleDestroyEvent event) {
+        if (!blockBreak || inDisabledWorld(event.getVehicle().getLocation())) return;
+
+        if (!(event.getAttacker() instanceof Player)) return;
+        Player player = (Player) event.getAttacker();
+
+        if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
+        if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+
+        if (event.getVehicle() instanceof Boat || event.getVehicle() instanceof Minecart) {
+            event.setCancelled(true);
+            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_BREAK, 3)) {
+                Messages.EVENT_BLOCK_BREAK.send(player);
             }
         }
     }
