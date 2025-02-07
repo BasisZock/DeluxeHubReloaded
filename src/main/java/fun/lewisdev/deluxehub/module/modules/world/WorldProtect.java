@@ -17,6 +17,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
+import org.bukkit.entity.minecart.CommandMinecart;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
+import org.bukkit.entity.minecart.HopperMinecart;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
@@ -35,20 +39,47 @@ public class WorldProtect extends Module {
     FileConfiguration config = getConfig(ConfigType.SETTINGS);
     private final List<Material> interactables = Arrays.asList(
             Material.ANVIL,
+            Material.ARMOR_STAND,
+            Material.BARREL,
             Material.BEACON,
             Material.BREWING_STAND,
+            Material.CAULDRON,
+            Material.CARTOGRAPHY_TABLE,
+            Material.CHISELED_BOOKSHELF,
             Material.COMMAND_BLOCK,
+            Material.COMPARATOR,
+            Material.COMPOSTER,
+            Material.CRAFTING_TABLE,
+            Material.CRAFTER,
             Material.DAYLIGHT_DETECTOR,
+            Material.DECORATED_POT,
             Material.DISPENSER,
             Material.DROPPER,
             Material.ENCHANTING_TABLE,
+            Material.FLETCHING_TABLE,
+            Material.FLOWER_POT,
             Material.FURNACE,
-            Material.HOPPER, Material.HOPPER_MINECART, Material.MINECART, Material.CHEST_MINECART,
+            Material.GRINDSTONE,
+            Material.HOPPER,
+            Material.HOPPER_MINECART,
+            Material.ITEM_FRAME,
+            Material.JUKEBOX,
+            Material.LEAD,
+            Material.LEVER,
+            Material.LOOM,
+            Material.MINECART,
             Material.NOTE_BLOCK,
-            Material.COMPARATOR,
-            Material.OAK_BOAT,
-            Material.FLOWER_POT, Material.DECORATED_POT,
-            Material.PAINTING, Material.ITEM_FRAME);
+            Material.PAINTING,
+            Material.REDSTONE_WIRE,
+            Material.REPEATER,
+            Material.RESPAWN_ANCHOR,
+            Material.SMITHING_TABLE,
+            Material.SMOKER,
+            Material.SPAWNER,
+            Material.STONECUTTER,
+            Material.STRUCTURE_BLOCK,
+            Material.TRIAL_SPAWNER
+    );
 
     private boolean hungerLoss;
     private boolean fallDamage;
@@ -191,7 +222,7 @@ public class WorldProtect extends Module {
             }
 
             // Check type patterns
-            if (type.name().contains("_DOOR") || type.name().contains("_TRAPDOOR") || type.name().contains("_BUTTON") || type.name().contains("_SIGN") || type.name().contains("_GATE") || type.name().contains("CHEST") || type.name().contains("_FENCE_GATE") || type.name().contains("POTTED_") || type.name().contains("_BED")) {
+            if (type.name().contains("_DOOR") || type.name().contains("_TRAPDOOR") || type.name().contains("_BUTTON") || type.name().contains("_SIGN") || type.name().contains("_GATE") || type.name().contains("CHEST") || type.name().contains("_FENCE_GATE") || type.name().contains("POTTED_") || type.name().contains("_BED") || type.name().contains("_BOAT")) {
 
                 event.setCancelled(true);
                 if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
@@ -447,6 +478,42 @@ public class WorldProtect extends Module {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onBoatInteract(PlayerInteractEvent event) {
+        if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
+
+        Player player = event.getPlayer();
+        if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+        if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+
+        // Check for all boat types
+        if (event.getItem() != null &&
+                (event.getItem().getType().name().contains("_BOAT"))) {
+            event.setCancelled(true);
+            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
+                Messages.EVENT_BLOCK_INTERACT.send(player);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerBoatInteraction(PlayerInteractEntityEvent event) {
+        if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
+
+        Entity entity = event.getRightClicked();
+        Player player = event.getPlayer();
+
+        if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+        if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+
+        if (entity instanceof Boat) {
+            event.setCancelled(true);
+            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
+                Messages.EVENT_BLOCK_INTERACT.send(player);
+            }
+        }
+    }
+
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getPlayer().hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
@@ -459,6 +526,51 @@ public class WorldProtect extends Module {
                 if (tryCooldown(event.getPlayer().getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
                     Messages.EVENT_BLOCK_INTERACT.send(event.getPlayer());
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMinecartInteraction(PlayerInteractEntityEvent event) {
+        if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
+
+        Entity entity = event.getRightClicked();
+        Player player = event.getPlayer();
+
+        if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+        if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+
+        if (entity instanceof Minecart ||
+                entity instanceof StorageMinecart ||
+                entity instanceof HopperMinecart ||
+                entity instanceof CommandMinecart ||
+                entity instanceof ExplosiveMinecart) {
+            event.setCancelled(true);
+            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
+                Messages.EVENT_BLOCK_INTERACT.send(player);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onMinecartPlacement(PlayerInteractEvent event) {
+        if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
+
+        Player player = event.getPlayer();
+        if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
+        if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
+
+        // Check for all minecart types
+        if (event.getItem() != null &&
+                (event.getItem().getType() == Material.MINECART ||
+                        event.getItem().getType() == Material.CHEST_MINECART ||
+                        event.getItem().getType() == Material.FURNACE_MINECART ||
+                        event.getItem().getType() == Material.HOPPER_MINECART ||
+                        event.getItem().getType() == Material.TNT_MINECART ||
+                        event.getItem().getType() == Material.COMMAND_BLOCK_MINECART)) {
+            event.setCancelled(true);
+            if (tryCooldown(player.getUniqueId(), CooldownType.BLOCK_INTERACT, 3)) {
+                Messages.EVENT_BLOCK_INTERACT.send(player);
             }
         }
     }
