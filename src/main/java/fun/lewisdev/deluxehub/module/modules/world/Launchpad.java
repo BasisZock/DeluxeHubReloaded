@@ -5,7 +5,6 @@ import fun.lewisdev.deluxehub.config.ConfigType;
 import fun.lewisdev.deluxehub.cooldown.CooldownType;
 import fun.lewisdev.deluxehub.module.Module;
 import fun.lewisdev.deluxehub.module.ModuleType;
-import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,8 +32,22 @@ public class Launchpad extends Module {
 		launch = config.getDouble("launchpad.launch_power", 1.3);
 		launchY = config.getDouble("launchpad.launch_power_y", 1.2);
 		actions = config.getStringList("launchpad.actions");
-		topBlock = XMaterial.matchXMaterial(config.getString("launchpad.top_block")).get().parseMaterial();
-		bottomBlock = XMaterial.matchXMaterial(config.getString("launchpad.bottom_block")).get().parseMaterial();
+
+		try {
+			topBlock = Material.valueOf(config.getString("launchpad.top_block").toUpperCase());
+		} catch (IllegalArgumentException e) {
+			// Fallback to a default material if invalid
+			topBlock = Material.STONE_PRESSURE_PLATE;
+			getPlugin().getLogger().warning("Invalid top block material in config. Defaulting to STONE_PRESSURE_PLATE");
+		}
+
+		try {
+			bottomBlock = Material.valueOf(config.getString("launchpad.bottom_block").toUpperCase());
+		} catch (IllegalArgumentException e) {
+			// Fallback to a default material if invalid
+			bottomBlock = Material.REDSTONE_BLOCK;
+			getPlugin().getLogger().warning("Invalid bottom block material in config. Defaulting to REDSTONE_BLOCK");
+		}
 
 		if (launch > 4.0) launch = 4.0;
 		if (launchY > 4.0) launchY = 4.0;

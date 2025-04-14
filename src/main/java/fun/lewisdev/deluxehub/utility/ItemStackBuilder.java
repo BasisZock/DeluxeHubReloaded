@@ -2,7 +2,6 @@ package fun.lewisdev.deluxehub.utility;
 
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.hook.hooks.head.HeadHook;
-import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -103,10 +102,19 @@ public class ItemStackBuilder {
 		return builder;
 	}
 
-	public static ItemStackBuilder getItemStack(ConfigurationSection section, Player player){
-		ItemStack item = XMaterial.matchXMaterial(section.getString("material").toUpperCase()).get().parseItem();
+	public static ItemStackBuilder getItemStack(ConfigurationSection section, Player player) {
+		Material material;
+		try {
+			material = Material.valueOf(section.getString("material").toUpperCase());
+		} catch (IllegalArgumentException e) {
+			// Fallback to a default material if the configured one is invalid
+			material = Material.STONE;
+			// You might want to log this error
+		}
 
-		if (item.getType() == XMaterial.PLAYER_HEAD.parseMaterial()) {
+		ItemStack item = new ItemStack(material);
+
+		if (material == Material.PLAYER_HEAD) {
 			if (section.contains("base64")) {
 				item = ((HeadHook) PLUGIN.getHookManager().getPluginHook("BASE64")).getHead(section.getString("base64")).clone();
 			} else if (section.contains("hdb") && PLUGIN.getHookManager().isHookEnabled("HEAD_DATABASE")) {

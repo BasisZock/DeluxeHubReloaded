@@ -3,7 +3,6 @@ package fun.lewisdev.deluxehub.inventory;
 import fun.lewisdev.deluxehub.DeluxeHubPlugin;
 import fun.lewisdev.deluxehub.utility.ItemStackBuilder;
 import fun.lewisdev.deluxehub.utility.NamespacedKeys;
-import fun.lewisdev.deluxehub.utility.universal.XMaterial;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -51,7 +50,7 @@ public abstract class AbstractInventory implements Listener {
 		for (int i = 0; i < inventory.getSize(); i++) {
 			ItemStack item = getInventory().getItem(i);
 			if (item == null || item.getType() == Material.AIR || !item.hasItemMeta()) continue;
-			if (item.getType() == XMaterial.PLAYER_HEAD.parseMaterial()) {
+			if (item.getType() == Material.PLAYER_HEAD) {
 				ItemMeta itemMeta = item.getItemMeta();
 				if (itemMeta != null) {
 					PersistentDataContainer dataContainer = itemMeta.getPersistentDataContainer();
