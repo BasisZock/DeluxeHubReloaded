@@ -51,6 +51,9 @@
 # Check for latest GitHub updates (recommended).
 check-updates: true
 
+# If you use multiple worlds set this to true
+multiple_worlds: false
+
 # Disable specific worlds
 disabled-worlds:
   # Should we invert the list making it a whitelist rather than a blacklist?
