@@ -18,6 +18,7 @@ import org.bukkit.event.HandlerList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class ModuleManager {
@@ -39,8 +40,12 @@ public class ModuleManager {
 			for (String world : config.getStringList("disabled-worlds.worlds")) disabledWorlds.remove(world);
 		}
 
-		registerModule(new TeleportationBow(plugin), "teleportation_bow.enabled");
-		registerModule(new PvPMode(plugin), "pvp_mode.enabled");
+		if (!config.getBoolean("multiple_worlds")) {
+			registerModule(new TeleportationBow(plugin), "teleportation_bow.enabled");
+			registerModule(new PvPMode(plugin), "pvp_mode.enabled");
+		} else {
+			Bukkit.getLogger().log(Level.WARNING, "Multiple worlds is enabled (This deactivates the teleportation bow and pvp mode modules)");
+		}
 		registerModule(new StaticTime(plugin), "static_time.enabled");
 		registerModule(new AntiWorldDownloader(plugin), "anti_wdl.enabled");
 		registerModule(new DoubleJump(plugin), "double_jump.enabled");
