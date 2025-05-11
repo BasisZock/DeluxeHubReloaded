@@ -3,6 +3,7 @@ package dev.strafbefehl.deluxehubreloaded.base;
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;
 import dev.strafbefehl.deluxehubreloaded.config.Messages;
+import dev.strafbefehl.deluxehubreloaded.utility.TextUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.GameMode;
@@ -60,7 +61,7 @@ public class BuildMode implements Listener {
 						}
 						if (p.getGameMode() != GameMode.CREATIVE) p.setGameMode(GameMode.CREATIVE);
 						if (_actionbar_enabled)
-							p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().appendLegacy(Messages.BUILD_MODE_ENABLED_ACTIONBAR.toString().replaceAll("&", "§")).create());
+							p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder().appendLegacy(TextUtil.color(String.valueOf(Messages.BUILD_MODE_ENABLED_ACTIONBAR))).create());
 					}
 				}
 			}
