@@ -85,6 +85,15 @@ public class UpdateChecker {
 										player.sendMessage(TextUtil.color("&7An update (" + version + ") for DeluxeHubReloaded is available."));
 										TextComponent downloadMessage = new TextComponent(TextUtil.color("&a[Download]"));
 										downloadMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, URL));
+
+										TextComponent spacer = new TextComponent(TextUtil.color(" &7| "));
+
+										TextComponent changelogMessage = new TextComponent(TextUtil.color("&6[Changelog]"));
+										changelogMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/uQkg8ZeHzK"));
+
+										downloadMessage.addExtra(spacer);
+										downloadMessage.addExtra(changelogMessage);
+
 										player.spigot().sendMessage(downloadMessage);
 									}
 								}
