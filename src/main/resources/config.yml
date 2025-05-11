@@ -74,13 +74,12 @@ build_mode:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # | STATIC TIME                              |
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 static_time:
   # Should StaticTime be enabled?
   enabled: false
-
   # Which time should be set permanently in hub worlds?
   time: 12000
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # | ANTI-WORLD DOWNLOADER                    | 
@@ -90,10 +89,8 @@ static_time:
 anti_wdl:
   # Should AntiWDL be enabled?
   enabled: true
-
   # Should players with 'deluxehub.antiwdl.alert' will be notified?
   notify_admins: true
-
   # There is no need to kick the player if he is running WDL as our system hooks into the mod to prevent a world download
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -103,18 +100,15 @@ anti_wdl:
 scoreboard:
   # Should the scoreboard feature be enabled?
   enabled: true
-
   # Should we delay showing the scoreboard?
   # Value in ticks (20 ticks = 1 second), 0 to disable
   display_delay:
     server_enter: 60 # 3 seconds
     world_change: 40 # 2 seconds
-
   # Should we refresh the scoreboard (update placeholders)?
   refresh:
     enabled: true
     rate: 200 # In ticks (20 ticks = 1 second)
-
   title: "{#9863E7}DeluxeHubReloaded{/#545eb6}"
   lines:
     - "&7&m----------------------------"
@@ -199,15 +193,12 @@ announcements:
 launchpad:
   # Should the launchpad feature be enabled ?
   enabled: true
-
   # Launch power for launchpad (max 4.0)
   launch_power: 3.0
   launch_power_y: 1.0
-
   # Top and bottom block required to make a launchpad
   top_block: STONE_PRESSURE_PLATE
   bottom_block: REDSTONE_BLOCK
-
   # Actions executed upon use of a launchpad
   actions:
     - '[SOUND] entity.bat.takeoff'
@@ -219,14 +210,11 @@ launchpad:
 double_jump:
   # Should the double jump feature be enabled?
   enabled: true
-
   # Launch power for double jump (max 4.0)
   launch_power: 1.0
   launch_power_y: 0.9
-
   # Cooldown time in seconds (0 to disable)
   cooldown: 3
-
   # Actions executed upon use of double jump
   actions:
     - '[SOUND] entity.bat.takeoff'
@@ -237,7 +225,6 @@ double_jump:
 command_block:
   # Should the command blocker feature be enabled?
   enabled: true
-
   # List of commands that will be blocked
   blocked_commands:
     - /pl
@@ -255,7 +242,6 @@ command_block:
 anti_swear:
   # Should the anti-swear feature be enabled?
   enabled: true
-
   # List of words that will be blocked
   blocked_words:
     - fuck
@@ -267,7 +253,6 @@ anti_swear:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 world_settings:
-
   # Player
   disable_hunger_loss: true
   disable_fall_damage: true
@@ -276,16 +261,13 @@ world_settings:
   disable_fire_damage: true
   disable_drowning: true
   disable_off_hand_swap: true # Requires 1.9+
-
   # Misc
   disable_weather_change: true
   disable_death_message: true
   disable_mob_spawning: true
-
   # Item entities
   disable_item_drop: true
   disable_item_pickup: true
-
   # Blocks
   disable_block_break: true
   disable_block_place: true
@@ -496,8 +478,9 @@ teleportation_bow:
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # | LEGACY SYSTEMS                           |
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-legacyPermissions:
+
+legacySystems:
   # Should we use the new lobby permission system?
   # If this is disabled build, destroy, interact, pvp, pickup and drop will be only possible in the build mode instead all the time as a admin
   # If this is enabled, the old system will be used (permission based https://strafbefehl.github.io/DeluxeHubReloadedDocs/goodtoknow/worldprotection)
-  enabled: false
+  permissionsEnabled: false

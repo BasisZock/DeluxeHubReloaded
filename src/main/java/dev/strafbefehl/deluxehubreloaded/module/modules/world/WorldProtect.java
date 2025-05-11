@@ -138,7 +138,7 @@ public class WorldProtect extends Module {
     public void onSignChange(SignChangeEvent event) {
         Player player = event.getPlayer();
         if (inDisabledWorld(player.getLocation())) return;
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -167,7 +167,7 @@ public class WorldProtect extends Module {
 
         Player player = event.getPlayer();
         if (inDisabledWorld(player.getLocation())) return;
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -198,7 +198,7 @@ public class WorldProtect extends Module {
             }
         }
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_PLACE.getPermission())) return;
         }
 
@@ -215,7 +215,7 @@ public class WorldProtect extends Module {
         if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
 
         Player player = event.getPlayer();
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -281,7 +281,7 @@ public class WorldProtect extends Module {
 
         if (inDisabledWorld(player.getLocation())) return;
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_ITEM_DROP.getPermission())) return;
         }
 
@@ -301,7 +301,7 @@ public class WorldProtect extends Module {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if (inDisabledWorld(player.getLocation())) return;
-            if (config.getBoolean("legacyPermissions.enabled")) {
+            if (config.getBoolean("legacySystems.permissionsEnabled")) {
                 if (player.hasPermission(Permissions.EVENT_ITEM_PICKUP.getPermission())) return;
             }
             if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -420,7 +420,7 @@ public class WorldProtect extends Module {
             }
         }
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (event.getDamager().hasPermission(Permissions.EVENT_PLAYER_PVP.getPermission())) return;
         }
 
@@ -440,7 +440,7 @@ public class WorldProtect extends Module {
 
         if (entity instanceof Painting || entity instanceof ItemFrame && player instanceof Player) {
             if (player != null) {
-                if (config.getBoolean("legacyPermissions.enabled")) {
+                if (config.getBoolean("legacySystems.permissionsEnabled")) {
                     if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
                 }
                 if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -458,7 +458,7 @@ public class WorldProtect extends Module {
         if (!blockInteract || inDisabledWorld(event.getRightClicked().getLocation())) return;
         Entity entity = event.getRightClicked();
         Entity player = event.getPlayer();
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -480,7 +480,7 @@ public class WorldProtect extends Module {
 
         if (entity instanceof ItemFrame && damager instanceof Player) {
             Player player = (Player) damager;
-            if (config.getBoolean("legacyPermissions.enabled")) {
+            if (config.getBoolean("legacySystems.permissionsEnabled")) {
                 if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
             }
             if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -497,7 +497,7 @@ public class WorldProtect extends Module {
         if (!blockInteract || inDisabledWorld(event.getLectern().getLocation())) return;
         Entity player = event.getPlayer();
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -513,7 +513,7 @@ public class WorldProtect extends Module {
         if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
 
         Player player = event.getPlayer();
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -535,7 +535,7 @@ public class WorldProtect extends Module {
         Entity entity = event.getRightClicked();
         Player player = event.getPlayer();
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -555,7 +555,7 @@ public class WorldProtect extends Module {
         if (!(event.getAttacker() instanceof Player)) return;
         Player player = (Player) event.getAttacker();
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_BREAK.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -570,7 +570,7 @@ public class WorldProtect extends Module {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (event.getPlayer().hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(event.getPlayer().getUniqueId())) return;
@@ -593,7 +593,7 @@ public class WorldProtect extends Module {
         Entity entity = event.getRightClicked();
         Player player = event.getPlayer();
 
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
@@ -615,7 +615,7 @@ public class WorldProtect extends Module {
         if (!blockInteract || inDisabledWorld(event.getPlayer().getLocation())) return;
 
         Player player = event.getPlayer();
-        if (config.getBoolean("legacyPermissions.enabled")) {
+        if (config.getBoolean("legacySystems.permissionsEnabled")) {
             if (player.hasPermission(Permissions.EVENT_BLOCK_INTERACT.getPermission())) return;
         }
         if (BuildMode.getInstance().isPresent(player.getUniqueId())) return;
