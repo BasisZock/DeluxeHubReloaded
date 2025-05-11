@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ public class ConfigMigrator {
     private final JavaPlugin plugin;
     private final Version currentVersion;
     private final List<VersionMigration> versionMigrations;
+    private final Set<String> excludedPaths;
 
     /**
      * Creates a new ConfigMigrator with the current plugin version
@@ -24,9 +26,24 @@ public class ConfigMigrator {
         this.plugin = plugin;
         this.currentVersion = Version.parse(plugin.getDescription().getVersion());
         this.versionMigrations = new ArrayList<>();
+        this.excludedPaths = new HashSet<>();
+
+        // Register paths to exclude from migration
+        registerExcludedPaths();
 
         // Register any version-specific migrations here
         registerMigrations();
+    }
+
+    /**
+     * Register paths that should be excluded from migration
+     */
+    private void registerExcludedPaths() {
+        // Add the announcements section to excluded paths
+        excludedPaths.add("announcements");
+
+        // Add other paths to exclude if needed
+        // excludedPaths.add("another.path.to.exclude");
     }
 
     private void registerMigrations() {
@@ -38,14 +55,6 @@ public class ConfigMigrator {
         // ));
     }
 
-    /**
-     * Migrates a configuration file, adding missing options from the default config
-     * while preserving existing values.
-     *
-     * @param configType The type of config to migrate
-     * @param configHandler The config handler containing the file
-     * @return True if changes were made, false otherwise
-     */
     /**
      * Migrates a configuration file, adding missing options from the default config
      * while preserving existing values.
@@ -124,7 +133,8 @@ public class ConfigMigrator {
     }
 
     /**
-     * Recursively adds missing entries from default config to current config
+     * Recursively adds missing entries from default config to current config,
+     * but skips excluded paths
      *
      * @param defaultConfig The default configuration from resources
      * @param currentConfig The current configuration file
@@ -134,12 +144,32 @@ public class ConfigMigrator {
     private boolean addMissingEntries(FileConfiguration defaultConfig, FileConfiguration currentConfig, String path) {
         boolean changes = false;
 
+        // Skip this path and its children if it's in the excluded paths
+        for (String excludedPath : excludedPaths) {
+            if (path.equals(excludedPath) || path.startsWith(excludedPath + ".")) {
+                return false;
+            }
+        }
+
         Set<String> defaultKeys = path.isEmpty()
                 ? defaultConfig.getKeys(false)
                 : defaultConfig.getConfigurationSection(path).getKeys(false);
 
         for (String key : defaultKeys) {
             String fullPath = path.isEmpty() ? key : path + "." + key;
+
+            // Skip excluded paths
+            boolean shouldSkip = false;
+            for (String excludedPath : excludedPaths) {
+                if (fullPath.equals(excludedPath) || fullPath.startsWith(excludedPath + ".")) {
+                    shouldSkip = true;
+                    break;
+                }
+            }
+
+            if (shouldSkip) {
+                continue;
+            }
 
             if (!currentConfig.contains(fullPath)) {
                 // This key doesn't exist in the current config, so add it
@@ -156,9 +186,6 @@ public class ConfigMigrator {
         return changes;
     }
 
-    /**
-     * Gets the file name for the given config type
-     */
     /**
      * Gets the file name for the given config type
      */
