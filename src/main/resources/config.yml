@@ -402,7 +402,7 @@ player_hider:
 pvp_mode:
   enabled: true
   # Slot the item should be given to?
-  slot: 2
+  slot: 7
   # Time to enable/disable PVP Mode
   time_to_toggle: 5
   switcher:
