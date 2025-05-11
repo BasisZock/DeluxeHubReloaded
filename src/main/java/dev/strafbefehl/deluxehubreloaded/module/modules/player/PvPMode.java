@@ -221,7 +221,7 @@ public class PvPMode extends Module {
 							inv.clear();
 							hotbarManager.giveItems(player);
 							if (tpBow != null) {
-								tpBow.giveItem(player);
+								tpBow.giveBow(player);
 							}
 							inv.setItem(_slot, _switcher.get(PvPSwitcherState.PVP_OFF));
 							hotbarManager.changeToJoinSlot(player);

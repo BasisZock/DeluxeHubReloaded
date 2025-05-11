@@ -165,30 +165,20 @@ public class TeleportationBow extends Module {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        giveItem(player);
+        giveBow(player);
     }
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onRespawn(org.bukkit.event.player.PlayerRespawnEvent ev){
-		giveItem(ev.getPlayer());
+		giveBow(ev.getPlayer());
 	}
 
     @Override
     public void onDisable() {}
 
-    public void giveItem(Player player){
+    public void giveBow(Player player){
         Inventory inv = player.getInventory();
-        boolean found = false;
-		short slot = _slot;
-        if(player.getInventory().getItem(slot) != null){
-            slot = (short) player.getInventory().firstEmpty();
-			if(slot <= 8) found = true;
-        }else found = true;
-        if(!found){
-            getPlugin().getLogger().warning("Could not find an empty slot for the teleportation bow for player " + player.getName());
-            return;
-        }
-        inv.setItem(slot, _bow);
+        inv.setItem(_slot, _bow);
 		giveArrow(player);
     }
 
