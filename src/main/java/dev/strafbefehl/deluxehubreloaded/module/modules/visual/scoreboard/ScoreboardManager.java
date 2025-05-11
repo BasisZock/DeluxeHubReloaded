@@ -4,6 +4,7 @@ import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;
 import dev.strafbefehl.deluxehubreloaded.module.Module;
 import dev.strafbefehl.deluxehubreloaded.module.ModuleType;
+import dev.strafbefehl.deluxehubreloaded.utility.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -68,10 +69,10 @@ public class ScoreboardManager extends Module {
 
 		ScoreHelper helper = players.get(player.getUniqueId());
 		if (helper == null) helper = new ScoreHelper(player);
-		helper.setTitle(title);
+		helper.setTitle(TextUtil.color(title));
 
 		for (String text : this.lines) {
-			helper.setSlot(lines, colorize(translateHexColorCodes(text)));
+			helper.setSlot(lines, TextUtil.color(text));
 			lines--;
 		}
 

@@ -39,7 +39,7 @@ public class ScoreHelper {
 
 	public void setTitle(String title) {
 		title = setPlaceholders(title);
-		objective.setDisplayName(title.length() > 200 ? title.substring(0, 200) : title);
+		objective.setDisplayName(title.length() > 400 ? title.substring(0, 400) : title);
 	}
 
 	public void setSlot(int slot, String text) {
