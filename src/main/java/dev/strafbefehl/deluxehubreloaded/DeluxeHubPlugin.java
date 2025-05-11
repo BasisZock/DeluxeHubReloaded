@@ -41,18 +41,8 @@ public class DeluxeHubPlugin extends JavaPlugin {
 
 	public void onEnable() {
 		long start = System.currentTimeMillis();
-
-		getLogger().log(Level.INFO, " ··························································································");
-		getLogger().log(Level.INFO, " : ____       _                _   _       _     ____      _                 _          _ :");
-		getLogger().log(Level.INFO, " :|  _ \\  ___| |_   ___  _____| | | |_   _| |__ |  _ \\ ___| | ___   __ _  __| | ___  __| |:");
-		getLogger().log(Level.INFO, " :| | | |/ _ \\ | | | \\ \\/ / _ \\ |_| | | | | '_ \\| |_) / _ \\ |/ _ \\ / _ |/ _ |/ _ \\/ _ |:");
-		getLogger().log(Level.INFO, " :| |_| |  __/ | |_| |>  <  __/  _  | |_| | |_) |  _ <  __/ | (_) | (_| | (_| |  __/ (_| |:");
-		getLogger().log(Level.INFO, " :|____/ \\___|_|\\__,_/_/\\_\\___|_| |_|\\__,_|_.__/|_| \\_\\___|_|\\___/ \\__,_|\\__,_|\\__,_|\\___|\\__,_|:");
-		getLogger().log(Level.INFO, " ··························································································");
-		getLogger().log(Level.INFO, "");
-		getLogger().log(Level.INFO, "Version: " + getDescription().getVersion());
-		getLogger().log(Level.INFO, "Author: Strafbefehl and ItsLewizzz");
-		getLogger().log(Level.INFO, "");
+		getLogger().log(Level.INFO, "Based on original code from DeluxeHub");
+		getLogger().log(Level.INFO, "Modified, and maintained by Strafbefehl, 2025");
 
 		// Check server version
 		if (Bukkit.getVersion().contains("1.13") || Bukkit.getVersion().contains("1.14") ||

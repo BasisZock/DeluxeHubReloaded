@@ -1,5 +1,5 @@
 name: ${name}
-authors: ["ItsLewizzz", "Strafbefehl"]
+authors: ["Strafbefehl", "ItsLewizzz"]
 version: ${version}
 description: ${description}
 website: ${url}
