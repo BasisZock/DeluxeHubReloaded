@@ -11,21 +11,44 @@ import java.util.Map;
 public class ConfigManager {
 
 	private final Map<ConfigType, ConfigHandler> configurations;
+	private ConfigMigrator migrator;
 
 	public ConfigManager() {
 		configurations = new HashMap<>();
 	}
 
 	public void loadFiles(DeluxeHubPlugin plugin) {
+		// Initialize the config migrator
+		migrator = new ConfigMigrator(plugin);
 
+		// Register all config files
 		registerFile(ConfigType.SETTINGS, new ConfigHandler(plugin, "config"));
 		registerFile(ConfigType.MESSAGES, new ConfigHandler(plugin, "messages"));
 		registerFile(ConfigType.DATA, new ConfigHandler(plugin, "data"));
 		registerFile(ConfigType.COMMANDS, new ConfigHandler(plugin, "commands"));
 
+		// Load all configs
 		configurations.values().forEach(ConfigHandler::saveDefaultConfig);
 
+		// Perform migrations if needed
+		migrateConfigs();
+
+		// Set the Messages configuration
 		Messages.setConfiguration(getFile(ConfigType.MESSAGES).getConfig());
+	}
+
+	/**
+	 * Migrates all configurations that need updating
+	 */
+	private void migrateConfigs() {
+		for (Map.Entry<ConfigType, ConfigHandler> entry : configurations.entrySet()) {
+			ConfigHandler handler = entry.getValue();
+			if (handler.needsMigration()) {
+				if (migrator.migrateConfig(entry.getKey(), handler)) {
+					handler.setMigrated();
+				}
+			}
+		}
 	}
 
 	public ConfigHandler getFile(ConfigType type) {
@@ -34,11 +57,13 @@ public class ConfigManager {
 
 	public void reloadFiles() {
 		configurations.values().forEach(ConfigHandler::reload);
+		// Perform migrations after reload in case plugin has been updated
+		migrateConfigs();
 		Messages.setConfiguration(getFile(ConfigType.MESSAGES).getConfig());
 	}
 
 	public void saveFiles() {
-		getFile(ConfigType.DATA).save();
+		configurations.values().forEach(ConfigHandler::save);
 	}
 
 	public void registerFile(ConfigType type, ConfigHandler config) {
@@ -48,5 +73,4 @@ public class ConfigManager {
 	public FileConfiguration getFileConfiguration(File file) {
 		return YamlConfiguration.loadConfiguration(file);
 	}
-
 }

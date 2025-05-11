@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'dev.strafbefehl'
-version = '3.6.13-r10-dev'
+version = '3.6.13'
 description = 'An all-in-one hub management system'
 
 repositories {
