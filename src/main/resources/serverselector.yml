@@ -30,6 +30,7 @@
 #
 # ITEM ACTIONS
 #   All item actions can be found here https://wiki.lewisdev.fun/free-resources/deluxehub/action-types
+version: 3.6.0
 
 # Slots of the GUI
 slots: 27

@@ -1,10 +1,10 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # PLUGIN MESSAGES
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-
+version: 3.6.0
 Messages:
   GENERAL:
-    PREFIX: "&dDeluxeHubReloaded &8❙"
+    PREFIX: "{#9863E7}DeluxeHubReloaded{/#545eb6} &8❙"
     NO_PERMISSION: "%prefix% &cYou are forbidden to use this."
     CUSTOM_COMMAND_NO_PERMISSION: "&cYou are not allowed to execute this command."
     INVALID_PLAYER: "%prefix% &c%player% is not online!"
@@ -49,8 +49,8 @@ Messages:
   SCOREBOARD:
     TOGGLE: "%prefix% &aYou have %value% the scoreboard"
 
-#  DOUBLE_JUMP:
-#    COOLDOWN_ACTIVE: "%prefix% &cYou must wait &e%time%s &cto Double Jump again!"  Deprecated
+  #  DOUBLE_JUMP:
+  #    COOLDOWN_ACTIVE: "%prefix% &cYou must wait &e%time%s &cto Double Jump again!"  Deprecated
 
   WORLD_EVENT_MODIFICATIONS:
     ITEM_DROP: "%prefix% &cYou are not allowed to drop items."

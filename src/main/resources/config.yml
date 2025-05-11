@@ -6,12 +6,12 @@
 # :|____/ \___|_|\__,_/_/\_\___|_| |_|\__,_|_.__/|_| \_\___|_|\___/ \__,_|\__,_|\___|\__,_|:
 # ··························································································
 # AUTHOR: Strafbefehl & Lewis D (ItsLewizzz)
-# WIKI: https://wiki.lewisdev.fun/free-resources/deluxehub
+# WIKI: https://strafbefehl.github.io/DeluxeHubReloadedDocs/welcome
 # Copyright (c) Lewis D 2017-2022. All rights reserved.
 # Support: https://discord.gg/uQkg8ZeHzK
 #--------
 # CUSTOM MENUS
-#   You can add more menus to the "DeluxeHub/menus" directory,
+#   You can add more menus to the "DeluxeHubReloaded/menus" directory,
 #   copy and paste the default, server selector, menu and edit the file.
 #   Use the name of the file as the action ID.
 #--------
@@ -50,6 +50,7 @@
 
 # Check for latest GitHub updates (recommended).
 check-updates: true
+version: 3.6.13
 
 # If you use multiple worlds set this to true
 multiple_worlds: false
@@ -114,15 +115,18 @@ scoreboard:
     enabled: true
     rate: 200 # In ticks (20 ticks = 1 second)
 
-  title: "&d&lDeluxeHubReloaded 3 &7(%online%/%online_max%)"
+  title: "{#9863E7}DeluxeHubReloaded{/#545eb6}"
   lines:
-    - "&7&m----------------------"
-    - "&e&lPlayer:"
-    - "  &f%player%"
+    - "&7&m----------------------------"
+    - "{#8546E5}Player:{/#C5CBFF}"
+    - "  {#C19EF6}%player%"
     - ""
-    - "&e&lRank:"
-    - "  &f%vault_rank%"
-    - "&7&m----------------------"
+    - "{#8546E5}Support:{/#C5CBFF}"
+    - "  {#C19EF6}https://discord.gg/uQkg8ZeHzK"
+    - ""
+    - "{#8546E5}Rate us!{/#C5CBFF}"
+    - "  {#C19EF6}SpigotMC"
+    - "&7&m----------------------------"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # |TABLIST                                   |
@@ -140,7 +144,7 @@ tablist:
   # Modify the header of the tablist
   header:
     - ""
-    - "&d&lDeluxeHubReloaded &7(%online%/%online_max%)"
+    - "{#9863E7}DeluxeHubReloaded{/#545eb6} &7(%online%/%online_max%)"
     - ""
 
   # Modify the footer of the tablist
@@ -312,7 +316,7 @@ join_events:
   - "[MESSAGE] &r  &3&lSTORE &fstore.examplemc.net"
   - "[MESSAGE] &r  &9&lDISCORD &fdiscord.examplemc.net"
   - "[MESSAGE] &r"
-  - "[MESSAGE] &r            &7&oPowered By DeluxeHubReloaded"
+  - "[MESSAGE] &r            &7&oPowered By {#9863E7}DeluxeHubReloaded{/#545eb6}"
   - "[MESSAGE] &8&m+---------------***---------------+"
   - "[TITLE] &b&lWELCOME;&f%player%;1;2;1"
   - "[SOUND] entity.player.levelup"
@@ -375,7 +379,7 @@ custom_join_items:
       material: NETHER_STAR
       amount: 1
       slot: 4
-      display_name: "&eServer Selector"
+      display_name: "{#9863E7}Server Selector{/#545eb6}"
       lore:
         - "&7Right-click to open the server selector!"
       actions:
