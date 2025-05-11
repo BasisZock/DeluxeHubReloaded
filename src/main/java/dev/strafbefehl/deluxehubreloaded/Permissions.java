@@ -31,6 +31,7 @@ public enum Permissions {
 	ANTI_SWEAR_NOTIFY("alert.antiswear"),
 	UPDATE_NOTIFICATION("alert.updates"),
 
+	// Legacy system
 	EVENT_ITEM_DROP("item.drop"),
 	EVENT_ITEM_PICKUP("item.pickup"),
 	EVENT_PLAYER_PVP("player.pvp"),

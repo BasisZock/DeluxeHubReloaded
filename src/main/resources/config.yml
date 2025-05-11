@@ -420,7 +420,7 @@ player_hider:
 pvp_mode:
   enabled: true
   # Slot the item should be given to?
-  slot: 7
+  slot: 2
   # Time to enable/disable PVP Mode
   time_to_toggle: 5
   switcher:
@@ -492,3 +492,12 @@ teleportation_bow:
     display_name: '&dTeleportation Arrow'
     lore:
       - '&dWhat a beautiful arrow!'
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# | LEGACY SYSTEMS                           |
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+legacyPermissions:
+  # Should we use the new lobby permission system?
+  # If this is disabled build, destroy, interact, pvp, pickup and drop will be only possible in the build mode instead all the time as a admin
+  # If this is enabled, the old system will be used (permission based https://strafbefehl.github.io/DeluxeHubReloadedDocs/goodtoknow/worldprotection)
+  enabled: false
