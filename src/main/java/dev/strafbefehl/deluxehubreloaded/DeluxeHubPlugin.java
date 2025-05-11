@@ -7,6 +7,7 @@ import dev.strafbefehl.deluxehubreloaded.command.CommandManager;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigManager;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;
 import dev.strafbefehl.deluxehubreloaded.config.Messages;
+import dev.strafbefehl.deluxehubreloaded.config.Version;
 import dev.strafbefehl.deluxehubreloaded.cooldown.CooldownManager;
 import dev.strafbefehl.deluxehubreloaded.hook.HooksManager;
 import dev.strafbefehl.deluxehubreloaded.inventory.InventoryManager;
@@ -36,6 +37,7 @@ public class DeluxeHubPlugin extends JavaPlugin {
 	private CooldownManager cooldownManager;
 	private ModuleManager moduleManager;
 	private InventoryManager inventoryManager;
+	private Version currentVersion;
 
 	public void onEnable() {
 		long start = System.currentTimeMillis();
@@ -124,6 +126,12 @@ public class DeluxeHubPlugin extends JavaPlugin {
 
 		getLogger().log(Level.INFO, "");
 		getLogger().log(Level.INFO, "Successfully loaded in " + (System.currentTimeMillis() - start) + "ms");
+
+		currentVersion = Version.parse(getDescription().getVersion());
+
+		// Initialize and load configurations
+		configManager = new ConfigManager();
+		configManager.loadFiles(this);
 	}
 
 	public void onDisable() {
@@ -198,6 +206,10 @@ public class DeluxeHubPlugin extends JavaPlugin {
 
 	public ConfigManager getConfigManager() {
 		return configManager;
+	}
+
+	public Version getCurrentVersion() {
+		return currentVersion;
 	}
 
 	public ActionManager getActionManager() {
