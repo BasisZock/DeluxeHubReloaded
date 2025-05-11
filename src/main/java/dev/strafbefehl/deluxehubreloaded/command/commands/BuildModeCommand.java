@@ -43,7 +43,7 @@ public class BuildModeCommand {
 				return;
 			}
 
-			if (config.getBoolean("pvp_mode.enabled")) {
+			if (config.getBoolean("pvp_mode.enabled") && !config.getBoolean("multiple_worlds")) {
 				PvPMode pvpMode = (PvPMode) plugin.getModuleManager().getModule(ModuleType.PVP_MODE);
 				if (pvpMode.isPlayerInPvPMode(target.getUniqueId())) {
 					Messages.BUILD_MODE_COMMAND_TARGET_IN_PVP_MODE.send(sender, "%target%", target.getDisplayName());
@@ -57,7 +57,7 @@ public class BuildModeCommand {
 			if (!(sender instanceof Player)) throw new CommandException("Console cannot use build mode");
 			target = (Player) sender;
 
-			if (config.getBoolean("pvp_mode.enabled")) {
+			if (config.getBoolean("pvp_mode.enabled") && !config.getBoolean("multiple_worlds")) {
 				if(((PvPMode) plugin.getModuleManager().getModule(ModuleType.PVP_MODE)).isPlayerInPvPMode(target.getUniqueId())){
 					Messages.BUILD_MODE_COMMAND_IN_PVP_MODE.send(sender);
 					return;
