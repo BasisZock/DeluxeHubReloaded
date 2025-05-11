@@ -50,7 +50,7 @@
 
 # Check for latest GitHub updates (recommended).
 check-updates: true
-version: 3.6.13
+version: 3.7.0
 
 # If you use multiple worlds set this to true
 multiple_worlds: false
