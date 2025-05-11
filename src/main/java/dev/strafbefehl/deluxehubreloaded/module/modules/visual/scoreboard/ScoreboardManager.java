@@ -16,9 +16,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.*;
 
-import static dev.strafbefehl.deluxehubreloaded.utility.color.patterns.HexUtils.colorize;
-import static dev.strafbefehl.deluxehubreloaded.utility.color.patterns.HexUtils.translateHexColorCodes;
-
 public class ScoreboardManager extends Module {
 
 	private int scoreTask;
