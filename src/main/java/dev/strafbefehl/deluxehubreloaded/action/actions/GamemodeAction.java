@@ -17,7 +17,7 @@ public class GamemodeAction implements Action {
 	public void execute(DeluxeHubPlugin plugin, Player player, String data) {
 		try {
 			player.setGameMode(GameMode.valueOf(data.toUpperCase()));
-			if (player.getGameMode() == GameMode.ADVENTURE) {
+			if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL) {
 				player.getPlayer().setAllowFlight(true);
 			}
 		} catch (IllegalArgumentException ex) {
