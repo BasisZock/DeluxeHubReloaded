@@ -1,7 +1,7 @@
 package dev.strafbefehl.deluxehubreloaded.module.modules.player;
 
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
-import dev.strafbefehl.deluxehubreloaded.base.BuildMode;
+import dev.strafbefehl.deluxehubreloaded.module.modules.world.BuildMode;
 import dev.strafbefehl.deluxehubreloaded.module.Module;
 import dev.strafbefehl.deluxehubreloaded.module.ModuleType;
 import org.bukkit.event.EventHandler;

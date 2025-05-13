@@ -1,4 +1,4 @@
-package dev.strafbefehl.deluxehubreloaded.base;
+package dev.strafbefehl.deluxehubreloaded.module.modules.world;
 
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;

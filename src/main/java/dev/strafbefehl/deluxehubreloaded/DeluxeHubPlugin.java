@@ -2,7 +2,7 @@ package dev.strafbefehl.deluxehubreloaded;
 
 import cl.bgmp.minecraft.util.commands.exceptions.*;
 import dev.strafbefehl.deluxehubreloaded.action.ActionManager;
-import dev.strafbefehl.deluxehubreloaded.base.BuildMode;
+import dev.strafbefehl.deluxehubreloaded.module.modules.world.BuildMode;
 import dev.strafbefehl.deluxehubreloaded.command.CommandManager;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigManager;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;

@@ -5,7 +5,7 @@ import cl.bgmp.minecraft.util.commands.annotations.Command;
 import cl.bgmp.minecraft.util.commands.exceptions.CommandException;
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
 import dev.strafbefehl.deluxehubreloaded.Permissions;
-import dev.strafbefehl.deluxehubreloaded.base.BuildMode;
+import dev.strafbefehl.deluxehubreloaded.module.modules.world.BuildMode;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;
 import dev.strafbefehl.deluxehubreloaded.config.Messages;
 import dev.strafbefehl.deluxehubreloaded.module.ModuleType;
