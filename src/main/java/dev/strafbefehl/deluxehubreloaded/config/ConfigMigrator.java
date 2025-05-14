@@ -43,6 +43,13 @@ public class ConfigMigrator {
         excludedPaths.add("announcements");
         excludedPaths.add("custom_join_items");
         excludedPaths.add("join_events");
+        excludedPaths.add("custom_commands");
+        excludedPaths.add("commands");
+        excludedPaths.add("command_block");
+        excludedPaths.add("anti_swear");
+        excludedPaths.add("join_settings");
+        excludedPaths.add("pvp_mode");
+
 
 
         // Add other paths to exclude if needed
