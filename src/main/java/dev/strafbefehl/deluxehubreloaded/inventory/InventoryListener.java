@@ -1,6 +1,6 @@
 package dev.strafbefehl.deluxehubreloaded.inventory;
 
-import dev.strafbefehl.deluxehubreloaded.base.BuildMode;
+import dev.strafbefehl.deluxehubreloaded.module.modules.world.BuildMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,7 +1,7 @@
 package dev.strafbefehl.deluxehubreloaded.module.modules.hotbar;
 
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
-import dev.strafbefehl.deluxehubreloaded.base.BuildMode;
+import dev.strafbefehl.deluxehubreloaded.module.modules.world.BuildMode;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;
 import dev.strafbefehl.deluxehubreloaded.module.Module;
 import dev.strafbefehl.deluxehubreloaded.module.ModuleType;
