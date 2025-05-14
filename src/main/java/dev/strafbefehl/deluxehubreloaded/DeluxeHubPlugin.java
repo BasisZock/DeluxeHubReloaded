@@ -122,6 +122,14 @@ public class DeluxeHubPlugin extends JavaPlugin {
 		// Initialize and load configurations
 		configManager = new ConfigManager();
 		configManager.loadFiles(this);
+
+		if (IsCompatible()) {
+			getLogger().severe("============= NOT RECOMMENDED SERVER VERSION =============");
+			getLogger().severe("DeluxeHubReloaded requires at least Spigot 1.21.3 to run without issues.");
+			getLogger().severe("Please consider to update your server to a newer version.");
+			getLogger().severe("PvP Mode, Teleportation Bow and some sounds are missing or disabled");
+			getLogger().severe("============= NOT RECOMMENDED SERVER VERSION =============");
+		}
 	}
 
 	public void onDisable() {
@@ -168,6 +176,11 @@ public class DeluxeHubPlugin extends JavaPlugin {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
 		}
 		return true;
+	}
+
+	public static boolean IsCompatible() {
+		String version = Bukkit.getBukkitVersion().split("-")[0];
+		return version.equals("1.21") || version.equals("1.21.1") || version.equals("1.21.2");
 	}
 
 	public HologramManager getHologramManager() {

@@ -43,11 +43,11 @@ public class ModuleManager {
 			for (String world : config.getStringList("disabled-worlds.worlds")) disabledWorlds.remove(world);
 		}
 
-		if (!config.getBoolean("multiple_worlds")) {
+		if (!config.getBoolean("multiple_worlds") || DeluxeHubPlugin.IsCompatible()) {
 			registerModule(new TeleportationBow(plugin), "teleportation_bow.enabled");
 			registerModule(new PvPMode(plugin), "pvp_mode.enabled");
 		} else {
-			Bukkit.getLogger().log(Level.WARNING, "Multiple worlds is enabled (This deactivates the teleportation bow and pvp mode modules)");
+			Bukkit.getLogger().log(Level.WARNING, "Multiple worlds is enabled or the server version is below 1.21.3 (This deactivates the teleportation bow and pvp mode modules)");
 		}
 		registerModule(new StaticTime(plugin), "static_time.enabled");
 		registerModule(new AntiWorldDownloader(plugin), "anti_wdl.enabled");
