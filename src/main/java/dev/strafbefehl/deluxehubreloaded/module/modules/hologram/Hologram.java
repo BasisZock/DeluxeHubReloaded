@@ -7,7 +7,6 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,18 +22,17 @@ public class Hologram {
 		stands = new ArrayList<>();
 	}
 
-	public Hologram setLines(List<String> lines) {
+	public void setLines(List<String> lines) {
 		remove();
 		for (String s : lines) addLine(s);
-		return this;
 	}
-
+/* not used
 	public Hologram addLines(List<String> lines) {
 		for (String s : lines) addLine(s);
 		return this;
 	}
-
-	public Hologram addLine(String text) {
+*/
+	public void addLine(String text) {
 		ArmorStand stand = (ArmorStand) location.getWorld().spawnEntity(location.clone().subtract(0, getHeight(), 0), EntityType.ARMOR_STAND);
 		stand.setVisible(false);
 		stand.setGravity(false);
@@ -42,13 +40,11 @@ public class Hologram {
 		stand.setCustomName(TextUtil.color(text).trim());
 		stand.setCanPickupItems(false);
 		stands.add(stand);
-		return this;
 	}
 
-	public Hologram setLine(int line, String text) {
+	public void setLine(int line, String text) {
 		ArmorStand stand = stands.get(line - 1);
 		stand.setCustomName(TextUtil.color(text).trim());
-		return this;
 	}
 
 	public Hologram removeLine(int line) {
@@ -76,14 +72,13 @@ public class Hologram {
 	}
 
 	public boolean hasLine(int line) {
-		return line - 1 < stands.size() && line > 0;
+		return line - 1 >= stands.size() || line <= 0;
 	}
 
 	public void remove() {
-		for (Iterator<ArmorStand> it = stands.iterator(); it.hasNext(); ) {
-			ArmorStand stand = it.next();
-			stand.remove();
-		}
+        for (ArmorStand stand : stands) {
+            stand.remove();
+        }
 		stands.clear();
 	}
 
