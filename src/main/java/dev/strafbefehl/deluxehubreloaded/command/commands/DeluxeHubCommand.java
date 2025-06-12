@@ -303,7 +303,7 @@ public class DeluxeHubCommand {
 					int line = Integer.parseInt(args.getString(3));
 					String text = TextUtil.joinString(5, args.getOriginalArgs());
 
-					if (!holo.hasLine(line)) {
+					if (holo.hasLine(line)) {
 						Messages.HOLOGRAMS_INVALID_LINE.send(player, "%line%", String.valueOf(line));
 						return;
 					}
@@ -344,7 +344,7 @@ public class DeluxeHubCommand {
 					Hologram holo = plugin.getHologramManager().getHologram(args.getString(2));
 					int line = Integer.parseInt(args.getString(3));
 
-					if (!holo.hasLine(line)) {
+					if (holo.hasLine(line)) {
 						Messages.HOLOGRAMS_INVALID_LINE.send(player, "%line%", String.valueOf(line));
 						return;
 					}
