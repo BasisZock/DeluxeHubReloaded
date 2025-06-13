@@ -62,3 +62,6 @@ permissions:
       deluxehub.block.break: true
       deluxehub.block.place: true
       deluxehub.block.interact: true
+  deluxehub.custom.*:
+    description: Gives access to all custom permissions
+    children:
