@@ -4,7 +4,7 @@ import cl.bgmp.minecraft.util.commands.CommandContext;
 import cl.bgmp.minecraft.util.commands.annotations.Command;
 import cl.bgmp.minecraft.util.commands.exceptions.CommandException;
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
-import dev.strafbefehl.deluxehubreloaded.Permissions;
+import dev.strafbefehl.deluxehubreloaded.utility.permissions.Permissions;
 import dev.strafbefehl.deluxehubreloaded.config.Messages;
 import dev.strafbefehl.deluxehubreloaded.module.ModuleType;
 import dev.strafbefehl.deluxehubreloaded.module.modules.world.LobbySpawn;

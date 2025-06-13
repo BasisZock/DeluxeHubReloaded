@@ -3,7 +3,7 @@ package dev.strafbefehl.deluxehubreloaded.utility;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import dev.strafbefehl.deluxehubreloaded.Permissions;
+import dev.strafbefehl.deluxehubreloaded.utility.permissions.Permissions;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;

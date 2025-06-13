@@ -1,7 +1,7 @@
 package dev.strafbefehl.deluxehubreloaded.module.modules.chat;
 
 import dev.strafbefehl.deluxehubreloaded.DeluxeHubPlugin;
-import dev.strafbefehl.deluxehubreloaded.Permissions;
+import dev.strafbefehl.deluxehubreloaded.utility.permissions.Permissions;
 import dev.strafbefehl.deluxehubreloaded.config.ConfigType;
 import dev.strafbefehl.deluxehubreloaded.config.Messages;
 import dev.strafbefehl.deluxehubreloaded.module.Module;
