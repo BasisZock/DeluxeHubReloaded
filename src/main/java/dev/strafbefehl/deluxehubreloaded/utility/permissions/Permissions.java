@@ -1,4 +1,4 @@
-package dev.strafbefehl.deluxehubreloaded;
+package dev.strafbefehl.deluxehubreloaded.utility.permissions;
 
 public enum Permissions {
 
